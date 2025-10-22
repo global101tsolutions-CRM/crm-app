@@ -1,0 +1,2172 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Salesesy Preview</title>
+    <link rel="icon" type="image/svg+xml" href="src/assets/salesesy-logo.svg" />
+    <style>
+      :root {
+        font-family: "Inter", system-ui, Arial, sans-serif;
+        --bg: #050f09;
+        --bg-alt: radial-gradient(circle at top left, rgba(34, 197, 94, 0.16), transparent 55%);
+        --sunken: rgba(6, 23, 14, 0.9);
+        --panel: rgba(10, 27, 18, 0.95);
+        --border: rgba(34, 84, 49, 0.45);
+        --border-strong: rgba(61, 132, 89, 0.6);
+        --text: #f5fff7;
+        --text-soft: #dbe7de;
+        --muted: #8fa999;
+        --accent: #22c55e;
+        --accent-dark: #15803d;
+        --accent-soft: rgba(34, 197, 94, 0.16);
+        --accent-weak: rgba(34, 197, 94, 0.16);
+        --accent-hover: #4ade80;
+        --accent-border-soft: rgba(56, 189, 120, 0.35);
+        --danger: #ef4444;
+        --shadow: 0 0 0 1px rgba(35, 70, 48, 0.6), 0 18px 40px rgba(0, 0, 0, 0.4);
+        --sidebar-bg: rgba(3, 18, 10, 0.94);
+        --sidebar-border: rgba(27, 64, 41, 0.6);
+        --pill-bg: rgba(11, 33, 19, 0.9);
+        --pill-border: rgba(42, 87, 55, 0.6);
+        --kanban-column-bg: rgba(9, 24, 15, 0.9);
+        --kanban-column-border: rgba(37, 84, 50, 0.5);
+        --deal-bg: rgba(14, 34, 22, 0.9);
+        --deal-border: rgba(32, 90, 51, 0.55);
+        --task-item-bg: rgba(10, 26, 16, 0.82);
+        --task-item-border: rgba(32, 79, 49, 0.5);
+        --empty-bg: rgba(7, 20, 12, 0.75);
+        --empty-border: rgba(30, 70, 45, 0.5);
+        --stage-chip-bg: rgba(11, 33, 19, 0.85);
+        --stage-chip-border: rgba(38, 92, 54, 0.6);
+        --stage-card-bg: rgba(10, 26, 16, 0.85);
+        --stage-card-border: rgba(32, 86, 50, 0.55);
+        --ghost-button-bg: rgba(7, 21, 13, 0.9);
+        --ghost-button-border: rgba(38, 92, 54, 0.6);
+        --input-bg: rgba(8, 24, 15, 0.92);
+        --input-border: rgba(36, 88, 52, 0.55);
+        --primary-text: #042b14;
+        --progress-track: rgba(24, 56, 36, 0.7);
+      }
+
+      body.theme-light {
+        --bg: #f7f9fb;
+        --bg-alt: radial-gradient(circle at top left, rgba(37, 99, 235, 0.14), transparent 55%);
+        --sunken: rgba(255, 255, 255, 0.96);
+        --panel: rgba(255, 255, 255, 0.97);
+        --border: rgba(148, 163, 184, 0.5);
+        --border-strong: rgba(100, 116, 139, 0.65);
+        --text: #0f172a;
+        --text-soft: #1e293b;
+        --muted: #475569;
+        --accent: #2563eb;
+        --accent-dark: #1d4ed8;
+        --accent-soft: rgba(37, 99, 235, 0.14);
+        --accent-weak: rgba(37, 99, 235, 0.12);
+        --accent-hover: #60a5fa;
+        --accent-border-soft: rgba(37, 99, 235, 0.28);
+        --shadow: 0 0 0 1px rgba(148, 163, 184, 0.25), 0 14px 32px rgba(15, 23, 42, 0.18);
+        --sidebar-bg: rgba(241, 245, 249, 0.96);
+        --sidebar-border: rgba(191, 219, 254, 0.55);
+        --pill-bg: rgba(248, 250, 252, 0.95);
+        --pill-border: rgba(148, 163, 184, 0.5);
+        --kanban-column-bg: rgba(255, 255, 255, 0.98);
+        --kanban-column-border: rgba(203, 213, 225, 0.7);
+        --deal-bg: rgba(241, 245, 249, 0.96);
+        --deal-border: rgba(148, 163, 184, 0.55);
+        --task-item-bg: rgba(248, 250, 252, 0.96);
+        --task-item-border: rgba(203, 213, 225, 0.65);
+        --empty-bg: rgba(226, 232, 240, 0.45);
+        --empty-border: rgba(148, 163, 184, 0.6);
+        --stage-chip-bg: rgba(226, 232, 240, 0.75);
+        --stage-chip-border: rgba(148, 163, 184, 0.6);
+        --stage-card-bg: rgba(248, 250, 252, 0.95);
+        --stage-card-border: rgba(203, 213, 225, 0.7);
+        --ghost-button-bg: rgba(236, 244, 255, 0.9);
+        --ghost-button-border: rgba(148, 163, 184, 0.55);
+        --input-bg: rgba(248, 250, 252, 0.95);
+        --input-border: rgba(191, 219, 254, 0.6);
+        --primary-text: #eff6ff;
+        --progress-track: rgba(203, 213, 225, 0.6);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        background-image: var(--bg-alt);
+        color: var(--accent-dark);
+        min-height: 100vh;
+        transition: background 0.35s ease, color 0.35s ease, background-image 0.35s ease;
+      }
+
+      a { color: inherit; }
+
+      .app {
+        display: grid;
+        grid-template-columns: 260px minmax(0, 1fr);
+        min-height: 100vh;
+        background: linear-gradient(140deg, rgba(3, 37, 19, 0.85), rgba(5, 18, 12, 0.92));
+        transition: background 0.3s ease;
+      }
+
+      body.theme-light .app {
+        background: linear-gradient(140deg, rgba(226, 232, 240, 0.85), rgba(237, 242, 255, 0.92));
+      }
+
+      .sidebar {
+        background: var(--sidebar-bg);
+        border-right: 1px solid var(--sidebar-border);
+        padding: 28px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+        transition: background 0.3s ease, border-color 0.3s ease;
+      }
+
+      .sidebar-top {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        align-items: flex-start;
+      }
+
+      .brand-link {
+        text-decoration: none;
+        color: inherit;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .brand-title {
+        margin: 0;
+        font-size: 1.4rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+      }
+      .brand-sub {
+        font-size: 0.72rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .theme-toggle {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 60px;
+        height: 28px;
+        padding: 4px 6px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: var(--sunken);
+        cursor: pointer;
+        transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+      }
+      .theme-toggle .icon {
+        position: relative;
+        z-index: 1;
+        width: 16px;
+        height: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--muted);
+        visibility: hidden;
+        opacity: 0;
+        transition: color 0.3s ease, opacity 0.3s ease;
+      }
+      .theme-toggle .toggle-thumb {
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        width: 20px;
+        height: 20px;
+        border-radius: 999px;
+        background: var(--accent);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+        z-index: 0;
+        transform: translateX(0);
+        transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+      }
+      .theme-toggle.dark .icon.moon,
+      .theme-toggle.light .icon.sun {
+        color: var(--accent);
+        visibility: visible;
+        opacity: 1;
+      }
+      .theme-toggle.dark .icon.sun,
+      .theme-toggle.light .icon.moon {
+        visibility: hidden;
+        opacity: 0;
+      }
+      .theme-toggle.light .toggle-thumb {
+        transform: translateX(28px);
+        box-shadow: 0 6px 14px rgba(37, 99, 235, 0.32);
+      }
+      .theme-toggle:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 2px var(--accent-soft);
+      }
+
+      .nav-links {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-top: 24px;
+      }
+      .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid transparent;
+        background: transparent;
+        color: var(--accent-dark);
+        font: inherit;
+        cursor: pointer;
+        text-align: left;
+        transition: background 0.18s ease, border-color 0.18s ease, transform 0.1s ease;
+      }
+      .nav-link:hover {
+        background: var(--accent-weak);
+        border-color: var(--accent-border-soft);
+      }
+      .nav-link.active {
+        background: var(--accent-weak);
+        border-color: var(--accent-border-soft);
+        font-weight: 600;
+      }
+      .nav-link span:last-child {
+        color: var(--text);
+        transition: color 0.3s ease;
+      }
+      body.theme-light .nav-link span:last-child {
+        color: var(--text);
+      }
+      body.theme-dark .nav-link span:last-child {
+        color: var(--text);
+      }
+      .nav-link .nav-bullet {
+        width: 7px;
+        height: 7px;
+        border-radius: 999px;
+        background: var(--accent);
+        box-shadow: 0 0 0 4px var(--accent-soft);
+      }
+      .nav-link:not(.active) .nav-bullet {
+        opacity: 0;
+      }
+      .nav-link.active .nav-bullet {
+        opacity: 1;
+      }
+
+      .nav-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        color: var(--muted);
+        transition: color 0.3s ease;
+      }
+      body.theme-dark .nav-icon {
+        color: rgba(231, 245, 234, 0.85);
+      }
+      body.theme-dark .nav-link.active .nav-icon {
+        color: var(--accent);
+      }
+      body.theme-light .nav-icon {
+        color: var(--muted);
+      }
+      .nav-link.active .nav-icon {
+        color: var(--accent);
+      }
+
+      .sidebar-footer {
+        margin-top: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .company-row {
+        cursor: pointer;
+        transition: background 0.18s ease;
+      }
+      .company-row:hover td {
+        background: var(--accent-weak);
+      }
+      .company-row.selected td {
+        background: rgba(34, 197, 94, 0.18);
+        border-color: var(--accent-border-soft);
+      }
+      body.theme-light .company-row.selected td {
+        background: rgba(59, 130, 246, 0.16);
+      }
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        border: 1px solid var(--pill-border);
+        background: var(--pill-bg);
+        color: var(--muted);
+        font-size: 0.78rem;
+        transition: background 0.3s ease, border-color 0.3s ease;
+      }
+      .status-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 999px;
+        background: rgba(239, 68, 68, 0.9);
+        box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.18);
+      }
+      .status-dot.online {
+        background: var(--accent);
+        box-shadow: 0 0 0 4px var(--accent-soft);
+      }
+      .company-detail {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+      .company-detail-grid {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      }
+      .company-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5cm;
+      }
+      .company-list-item {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px;
+        background: var(--sunken);
+      }
+      body.theme-light .company-list-item {
+        background: rgba(248, 250, 252, 0.96);
+        border-color: rgba(203, 213, 225, 0.7);
+      }
+      .company-note {
+        margin-top: -6px;
+      }
+      .company-profile {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+      .profile-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .company-profile-layout {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: minmax(0, 280px) minmax(0, 1fr) minmax(0, 260px);
+      }
+      @media (max-width: 1200px) {
+        .company-profile-layout {
+          grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
+        }
+      }
+      @media (max-width: 900px) {
+        .company-profile-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+      .profile-sidebar,
+      .profile-main,
+      .profile-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .profile-stat-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 12px;
+      }
+      .profile-stat-grid a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      .profile-stat-grid a:hover {
+        text-decoration: underline;
+      }
+      .profile-links {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .profile-links button {
+        width: 100%;
+        justify-content: flex-start;
+      }
+      .timeline {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .timeline-day {
+        display: grid;
+        grid-template-columns: 110px 1fr;
+        gap: 12px;
+        align-items: flex-start;
+      }
+      @media (max-width: 640px) {
+        .timeline-day {
+          grid-template-columns: 1fr;
+        }
+      }
+      .timeline-date {
+        font-weight: 600;
+        color: var(--muted);
+      }
+      .timeline-card {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px;
+        background: var(--sunken);
+      }
+      body.theme-light .timeline-card {
+        background: rgba(248, 250, 252, 0.96);
+        border-color: rgba(203, 213, 225, 0.7);
+      }
+      .profile-grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+      .profile-contact,
+      .profile-deal {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 14px;
+        background: var(--sunken);
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      body.theme-light .profile-contact,
+      body.theme-light .profile-deal {
+        background: rgba(248, 250, 252, 0.96);
+        border-color: rgba(203, 213, 225, 0.7);
+      }
+
+      .main {
+        display: flex;
+        flex-direction: column;
+        backdrop-filter: blur(16px);
+      }
+
+      .topbar {
+        padding: 28px 32px 0;
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: space-between;
+      }
+      .topbar h1 {
+        margin: 0;
+        font-size: 2rem;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+      }
+      .topbar-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .content {
+        padding: 24px 32px 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 22px 24px;
+        box-shadow: var(--shadow);
+        position: relative;
+        overflow: visible;
+        color: var(--text);
+      }
+      .card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, var(--accent-soft), transparent 70%);
+        opacity: 0.5;
+        border-radius: inherit;
+        pointer-events: none;
+      }
+      .card > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      .metric-grid {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      }
+      .metric-card {
+        padding-bottom: 26px;
+      }
+      .metric-label {
+        font-size: 0.85rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .metric-value {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-top: 8px;
+        color: var(--text);
+      }
+      .metric-sub {
+        margin-top: 6px;
+        color: var(--text-soft);
+        font-size: 0.9rem;
+      }
+
+      .grid-2 {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr);
+        align-items: start;
+      }
+
+      .section-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+      }
+      .section-title {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+
+      .stage-progress {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .progress-row {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+      }
+      .progress-label {
+        min-width: 120px;
+      }
+      .progress-label b {
+        font-size: 1rem;
+      }
+      .progress-meta {
+        font-size: 0.82rem;
+        color: var(--muted);
+      }
+      .progress-bar {
+        flex: 1;
+        height: 6px;
+        background: var(--progress-track);
+        border-radius: 999px;
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--accent-soft), var(--accent));
+        border-radius: inherit;
+      }
+
+      .list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5cm;
+      }
+      @supports not (gap: 1rem) {
+        .company-list > * + *,
+        .list > * + * {
+          margin-top: 0.5cm;
+        }
+      }
+      .task-item {
+        padding: 12px;
+        border-radius: 14px;
+        border: 1px solid var(--task-item-border);
+        background: var(--task-item-bg);
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        transition: background 0.3s ease, border-color 0.3s ease;
+      }
+      .task-item strong {
+        font-size: 0.95rem;
+      }
+      .task-item .muted {
+        font-size: 0.8rem;
+      }
+
+      .deal-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 12px;
+        border-radius: 14px;
+        border: 1px solid var(--deal-border);
+        background: var(--deal-bg);
+        transition: background 0.3s ease, border-color 0.3s ease;
+      }
+      .deal-meta {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: var(--accent-weak);
+        border: 1px solid var(--accent-border-soft);
+        color: var(--accent-dark);
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      body.theme-dark .pill {
+        color: var(--text);
+        border-color: rgba(56, 189, 120, 0.35);
+        background: rgba(34, 197, 94, 0.16);
+      }
+
+      .empty {
+        padding: 24px;
+        text-align: center;
+        color: var(--muted);
+        background: var(--empty-bg);
+        border-radius: 18px;
+        border: 1px dashed var(--empty-border);
+        transition: background 0.3s ease, border-color 0.3s ease;
+      }
+
+      .grid {
+        display: grid;
+        gap: 18px;
+      }
+
+      .kanban {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 18px;
+      }
+      .column {
+        background: var(--kanban-column-bg);
+        border: 1px solid var(--kanban-column-border);
+        border-radius: 18px;
+        padding: 14px;
+        min-height: 260px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        transition: background 0.3s ease, border-color 0.3s ease;
+      }
+      .column-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .column-header .muted {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      .deal {
+        background: var(--deal-bg);
+        border: 1px solid var(--deal-border);
+        border-radius: 16px;
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        transition: background 0.3s ease, border-color 0.3s ease;
+      }
+      .deal-company {
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+      .deal-amount {
+        text-align: right;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text);
+      }
+      .deal-updated {
+        font-size: 0.75rem;
+        color: var(--muted);
+      }
+
+      .row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      .row.wrap {
+        flex-wrap: wrap;
+      }
+      .row-grow {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .muted { color: var(--muted); }
+
+      input, select, textarea {
+        font: inherit;
+        background: var(--input-bg);
+        color: var(--accent-dark);
+        border: 1px solid var(--input-border);
+        padding: 10px 12px;
+        border-radius: 12px;
+        transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+      }
+      body.theme-dark input,
+      body.theme-dark select,
+      body.theme-dark textarea {
+        color: var(--text);
+      }
+      input::placeholder, textarea::placeholder {
+        color: rgba(148, 176, 162, 0.7);
+        transition: color 0.3s ease;
+      }
+      body.theme-light input::placeholder,
+      body.theme-light textarea::placeholder {
+        color: rgba(100, 116, 139, 0.6);
+      }
+      input:focus, select:focus, textarea:focus, button:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--accent-soft);
+      }
+      button {
+        font: inherit;
+        background: var(--ghost-button-bg);
+        color: var(--accent-dark);
+        border: 1px solid var(--ghost-button-border);
+        padding: 10px 12px;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: border-color 0.18s ease, background 0.18s ease, transform 0.1s ease, color 0.18s ease;
+      }
+      body.theme-dark button {
+        color: var(--text);
+      }
+      button:hover {
+        border-color: var(--accent-border-soft);
+      }
+      button:active {
+        transform: translateY(1px);
+      }
+      button.primary {
+        background: var(--accent);
+        color: var(--primary-text);
+        border-color: var(--accent-dark);
+        font-weight: 600;
+      }
+      button.primary:hover {
+        background: var(--accent-hover);
+      }
+      button.ghost {
+        background: var(--ghost-button-bg);
+        border-color: var(--ghost-button-border);
+      }
+
+      .stack-tight {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .company-cell {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .company-initial {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        background: rgba(34, 197, 94, 0.18);
+        color: var(--accent);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        flex-shrink: 0;
+      }
+      .company-row.selected .company-initial {
+        background: rgba(34, 197, 94, 0.28);
+      }
+      body.theme-light .company-row .company-initial {
+        background: rgba(37, 99, 235, 0.16);
+        color: rgba(29, 78, 216, 0.9);
+      }
+      body.theme-light .company-row.selected .company-initial {
+        background: rgba(59, 130, 246, 0.26);
+      }
+
+      .company-spotlight {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 24px;
+      }
+      .company-spotlight h4 {
+        margin: 0;
+        font-size: 1.3rem;
+      }
+
+      .stage-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        max-width: 320px;
+      }
+
+      .stage-chip {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 8px 12px;
+        border-radius: 12px;
+        border: 1px solid var(--stage-chip-border);
+        background: var(--stage-chip-bg);
+        min-width: 120px;
+        transition: background 0.3s ease, border-color 0.3s ease;
+      }
+      .stage-chip span {
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+      .stage-chip b {
+        font-size: 1.1rem;
+      }
+
+      .stage-card {
+        min-width: 150px;
+        padding: 16px;
+        border-radius: 14px;
+        border: 1px solid var(--stage-card-border);
+        background: var(--stage-card-bg);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+        text-align: center;
+        transition: background 0.3s ease, border-color 0.3s ease;
+      }
+      .stage-card strong {
+        font-size: 1.4rem;
+      }
+      .stage-label {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th, td {
+        padding: 12px 10px;
+        border-bottom: 1px solid var(--border);
+        text-align: left;
+        vertical-align: middle;
+      }
+      th {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
+      tr:last-child td {
+        border-bottom: none;
+      }
+      td.right { text-align: right; }
+
+      @media (max-width: 1100px) {
+        .app {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .sidebar {
+          position: sticky;
+          top: 0;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+          padding: 18px 24px;
+          gap: 18px;
+          z-index: 10;
+        }
+        .nav-links {
+          flex-direction: row;
+          margin-top: 0;
+        }
+        .nav-link {
+          padding: 8px 12px;
+        }
+        .sidebar-footer {
+          flex-direction: row;
+          margin-top: 0;
+        }
+        .status-pill {
+          margin-left: auto;
+        }
+      }
+
+      @media (max-width: 900px) {
+        .topbar {
+          padding: 20px;
+        }
+        .content {
+          padding: 20px;
+        }
+        .grid-2 {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .metric-grid {
+          grid-template-columns: 1fr;
+        }
+        .topbar h1 {
+          font-size: 1.6rem;
+        }
+      }
+    </style>
+  </head>
+  <body class="theme-dark">
+    <div class="app">
+      <aside class="sidebar">
+        <div>
+          <div class="sidebar-top">
+            <button class="theme-toggle dark" type="button" aria-label="Switch to light mode" title="Switch to light mode">
+              <span class="toggle-thumb"></span>
+              <span class="icon sun" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="5" fill="currentColor" opacity="0.15"></circle>
+                  <circle cx="12" cy="12" r="4" fill="none"></circle>
+                  <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M5.64 18.36l1.42-1.42M16.94 6.64l1.42-1.42"></path>
+                </svg>
+              </span>
+              <span class="icon moon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 12.79A9 9 0 0 1 11.21 3 7 7 0 1 0 21 12.79Z"></path>
+                </svg>
+              </span>
+            </button>
+            <a class="brand brand-link" href="./preview.html">
+              <img src="src/assets/salesesy-logo.svg" alt="Salesesy logo" width="36" height="36" style="filter: drop-shadow(0 4px 8px rgba(0,0,0,0.35));" />
+              <div>
+                <h2 class="brand-title">Salesesy</h2>
+                <div class="brand-sub">Growth CRM</div>
+              </div>
+            </a>
+          </div>
+          <nav class="nav-links">
+            <button class="nav-link active" data-tab="dashboard" type="button">
+              <span class="nav-bullet"></span>
+              <span class="nav-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="8" height="8" rx="2"></rect>
+                  <rect x="13" y="3" width="8" height="5" rx="2"></rect>
+                  <rect x="13" y="10" width="8" height="11" rx="2"></rect>
+                  <rect x="3" y="13" width="8" height="8" rx="2"></rect>
+                </svg>
+              </span>
+              <span>Dashboard</span>
+            </button>
+            <button class="nav-link" data-tab="companies" type="button">
+              <span class="nav-bullet"></span>
+              <span class="nav-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 21V5a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v14"></path>
+                  <path d="M9 21v-4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4"></path>
+                  <path d="M7 10h.01M7 14h.01M17 10h-4M17 14h-4"></path>
+                </svg>
+              </span>
+              <span>Companies</span>
+            </button>
+            <button class="nav-link" data-tab="contacts" type="button">
+              <span class="nav-bullet"></span>
+              <span class="nav-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="7" r="4"></circle>
+                  <path d="M5 21v-1a6 6 0 0 1 6-6h2a6 6 0 0 1 6 6v1"></path>
+                </svg>
+              </span>
+              <span>Contacts</span>
+            </button>
+            <button class="nav-link" data-tab="deals" type="button">
+              <span class="nav-bullet"></span>
+              <span class="nav-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m4 11 4 4 12-12"></path>
+                  <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7"></path>
+                </svg>
+              </span>
+              <span>Deals</span>
+            </button>
+            <button class="nav-link" data-tab="tasks" type="button">
+              <span class="nav-bullet"></span>
+              <span class="nav-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 11l3 3L22 4"></path>
+                  <path d="M21 12v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                </svg>
+              </span>
+              <span>Tasks</span>
+            </button>
+            <button class="nav-link" data-tab="settings" type="button">
+              <span class="nav-bullet"></span>
+              <span class="nav-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"></path>
+                </svg>
+              </span>
+              <span>Settings</span>
+            </button>
+          </nav>
+        </div>
+        <div class="sidebar-footer">
+          <div class="status-pill"><span class="status-dot online"></span>Demo mode</div>
+        </div>
+      </aside>
+      <div class="main">
+        <header class="topbar">
+          <div>
+            <h1 id="page-title">Dashboard</h1>
+            <p class="muted" id="page-sub">Monitor revenue health, tasks, and top deals.</p>
+          </div>
+          <div class="topbar-actions">
+            <input type="search" placeholder="Quick search" aria-label="Quick search" />
+            <button class="ghost" type="button" onclick="navigateToNewContact()">Add contact</button>
+            <button class="primary" type="button">New deal</button>
+          </div>
+        </header>
+        <main class="content">
+          <section data-view="dashboard">
+            <section class="metric-grid">
+              <div class="card metric-card">
+                <div class="metric-label">Active deals</div>
+                <div class="metric-value">18</div>
+                <div class="metric-sub">Opportunities across all pipelines</div>
+              </div>
+              <div class="card metric-card">
+                <div class="metric-label">Pipeline value</div>
+                <div class="metric-value">$428,000</div>
+                <div class="metric-sub">Sum of deal amounts</div>
+              </div>
+              <div class="card metric-card">
+                <div class="metric-label">Expected revenue</div>
+                <div class="metric-value">$214,600</div>
+                <div class="metric-sub">Weighted by stage probability</div>
+              </div>
+              <div class="card metric-card">
+                <div class="metric-label">Avg deal size</div>
+                <div class="metric-value">$23,777</div>
+                <div class="metric-sub">Based on active deals</div>
+              </div>
+            </section>
+
+            <section class="grid-2">
+              <div class="card">
+                <div class="section-header">
+                  <div>
+                    <h3 class="section-title">Sales Pipeline snapshot</h3>
+                    <p class="muted">See how opportunities stack up across stages.</p>
+                  </div>
+                </div>
+                <div class="stage-progress">
+                  <div class="progress-row">
+                    <div class="progress-label"><b>New</b><div class="progress-meta">5 deals &middot; $65,000</div></div>
+                    <div class="progress-bar"><div class="progress-fill" style="width:32%"></div></div>
+                  </div>
+                  <div class="progress-row">
+                    <div class="progress-label"><b>Qualified</b><div class="progress-meta">4 deals &middot; $84,000</div></div>
+                    <div class="progress-bar"><div class="progress-fill" style="width:40%"></div></div>
+                  </div>
+                  <div class="progress-row">
+                    <div class="progress-label"><b>Proposal</b><div class="progress-meta">3 deals &middot; $120,000</div></div>
+                    <div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div>
+                  </div>
+                  <div class="progress-row">
+                    <div class="progress-label"><b>Negotiation</b><div class="progress-meta">4 deals &middot; $100,000</div></div>
+                    <div class="progress-bar"><div class="progress-fill" style="width:50%"></div></div>
+                  </div>
+                  <div class="progress-row">
+                    <div class="progress-label"><b>Won</b><div class="progress-meta">2 deals &middot; $59,000</div></div>
+                    <div class="progress-bar"><div class="progress-fill" style="width:28%"></div></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="section-header">
+                  <div>
+                    <h3 class="section-title">Upcoming tasks</h3>
+                    <p class="muted">Stay ahead on follow-ups and reminders.</p>
+                  </div>
+                </div>
+                <div class="list">
+                  <div class="task-item"><strong>Follow up: Globex renewal</strong><div class="muted">Due Apr 2 &middot; Owner: Ava</div></div>
+                  <div class="task-item"><strong>Prep discovery: Initech</strong><div class="muted">Due Apr 3 &middot; Owner: Jan</div></div>
+                  <div class="task-item"><strong>Email recap: Summit call</strong><div class="muted">Due Apr 4 &middot; Owner: Ola</div></div>
+                </div>
+              </div>
+            </section>
+
+            <section class="card">
+              <div class="section-header">
+                <div>
+                  <h3 class="section-title">Top deals</h3>
+                  <p class="muted">Highest-value opportunities in your pipeline.</p>
+                </div>
+              </div>
+              <div class="list">
+                <div class="deal-row"><div><strong>Enterprise support expansion</strong><div class="muted">Globex</div></div><div class="deal-meta"><span class="pill">Negotiation</span><div class="deal-amount">$140,000</div></div></div>
+                <div class="deal-row"><div><strong>Website redesign</strong><div class="muted">Acme</div></div><div class="deal-meta"><span class="pill">Proposal</span><div class="deal-amount">$110,000</div></div></div>
+                <div class="deal-row"><div><strong>Platform rollout</strong><div class="muted">Initech</div></div><div class="deal-meta"><span class="pill">Qualified</span><div class="deal-amount">$96,000</div></div></div>
+              </div>
+            </section>
+          </section>
+
+          <section data-view="companies" hidden>
+            <section class="metric-grid">
+              <div class="card metric-card"><div class="metric-label">Active companies</div><div class="metric-value">12</div><div class="metric-sub">Accounts with current activity</div></div>
+              <div class="card metric-card"><div class="metric-label">Open deals</div><div class="metric-value">24</div><div class="metric-sub">Opportunities linked to accounts</div></div>
+              <div class="card metric-card"><div class="metric-label">Pipeline value</div><div class="metric-value">$428,000</div><div class="metric-sub">Forecasted revenue this quarter</div></div>
+              <div class="card metric-card"><div class="metric-label">Avg deal size</div><div class="metric-value">$17,833</div><div class="metric-sub">Across all active companies</div></div>
+            </section>
+
+            <section class="card">
+              <div class="section-header">
+                <div><h3 class="section-title">Account spotlight</h3><p class="muted">Most valuable company in your pipeline right now.</p></div>
+                <button class="ghost" type="button">Refresh companies</button>
+              </div>
+              <div class="company-spotlight">
+                <div>
+                  <h4 id="spotlight-name">Globex Corporation</h4>
+                  <p class="muted" id="spotlight-activity">Last activity &bull; Apr 2, 13:40</p>
+                  <div class="row wrap" style="margin-top:12px;">
+                    <span class="pill" id="spotlight-contacts">4 contacts</span>
+                    <span class="pill" id="spotlight-deals">5 deals</span>
+                    <span class="pill" id="spotlight-value">$145,000 pipeline</span>
+                  </div>
+                </div>
+                <div class="stage-stack" id="spotlight-stages">
+                  <div class="stage-chip"><span>Negotiation</span><b>2</b></div>
+                  <div class="stage-chip"><span>Proposal</span><b>1</b></div>
+                  <div class="stage-chip"><span>Qualified</span><b>1</b></div>
+                  <div class="stage-chip"><span>New</span><b>1</b></div>
+                </div>
+              </div>
+            </section>
+
+            <section class="card">
+              <div class="section-header">
+                <div><h3 class="section-title">Company leaderboard</h3><p class="muted">Sorted by pipeline value and engagement.</p></div>
+              </div>
+              <table>
+                <thead>
+                  <tr><th>Company</th><th>Contacts</th><th>Open deals</th><th>Owners</th><th>Pipeline value</th><th class="right">Last activity</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="company-row selected" data-company="globex">
+                    <td>
+                      <div class="company-cell">
+                        <div class="company-initial" aria-hidden="true"></div>
+                        <div class="stack-tight"><strong>Globex Corporation</strong><span class="muted">Negotiation lead</span></div>
+                      </div>
+                    </td>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>Ava</td>
+                    <td>$145,000</td>
+                    <td class="right">Apr 2, 13:40</td>
+                  </tr>
+                  <tr class="company-row" data-company="acme">
+                    <td>
+                      <div class="company-cell">
+                        <div class="company-initial" aria-hidden="true"></div>
+                        <div class="stack-tight"><strong>Acme Inc.</strong><span class="muted">In proposal</span></div>
+                      </div>
+                    </td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>Ola</td>
+                    <td>$120,000</td>
+                    <td class="right">Apr 1, 09:24</td>
+                  </tr>
+                  <tr class="company-row" data-company="initech">
+                    <td>
+                      <div class="company-cell">
+                        <div class="company-initial" aria-hidden="true"></div>
+                        <div class="stack-tight"><strong>Initech</strong><span class="muted">Qualified</span></div>
+                      </div>
+                    </td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>Jan</td>
+                    <td>$84,000</td>
+                    <td class="right">Mar 31, 17:55</td>
+                  </tr>
+                  <tr class="company-row" data-company="stark">
+                    <td>
+                      <div class="company-cell">
+                        <div class="company-initial" aria-hidden="true"></div>
+                        <div class="stack-tight"><strong>Stark Industries</strong><span class="muted">Proposal</span></div>
+                      </div>
+                    </td>
+                    <td>5</td>
+                    <td>2</td>
+                    <td>Ava</td>
+                    <td>$52,000</td>
+                    <td class="right">Mar 30, 16:48</td>
+                  </tr>
+                  <tr class="company-row" data-company="wayne">
+                    <td>
+                      <div class="company-cell">
+                        <div class="company-initial" aria-hidden="true"></div>
+                        <div class="stack-tight"><strong>Wayne Enterprises</strong><span class="muted">Negotiation</span></div>
+                      </div>
+                    </td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>Ola</td>
+                    <td>$37,000</td>
+                    <td class="right">Mar 29, 14:10</td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+
+            <section class="card company-detail">
+              <div class="section-header">
+                <div>
+                  <h3 class="section-title" id="company-detail-name">Globex Corporation</h3>
+                  <p class="muted" id="company-detail-summary">Negotiation &bull; $145,000 pipeline &bull; Owners Ava</p>
+                </div>
+                <div class="row wrap">
+                  <button class="ghost" type="button">Send email</button>
+                  <button class="ghost" type="button">Log call</button>
+                  <button class="primary" type="button">Schedule follow-up</button>
+                </div>
+              </div>
+              <div class="company-detail-grid">
+                <div>
+                  <h4>Key contacts</h4>
+                  <ul class="company-list" id="company-detail-contacts">
+                    <li class="company-list-item">
+                      <strong>Ava Nowak</strong>
+                      <div class="muted">Operations lead</div>
+                      <div class="muted">ava.nowak@example.com</div>
+                      <div class="muted">+48 123 456 789</div>
+                    </li>
+                    <li class="company-list-item">
+                      <strong>Victor Chen</strong>
+                      <div class="muted">CTO</div>
+                      <div class="muted">victor.chen@globex.com</div>
+                      <div class="muted">+48 345 987 654</div>
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h4>Open deals</h4>
+                  <ul class="company-list" id="company-detail-deals">
+                    <li class="company-list-item">
+                      <div class="row-grow" style="align-items:flex-start;">
+                        <div>
+                          <strong>Enterprise support expansion</strong>
+                          <div class="muted">Negotiation</div>
+                        </div>
+                        <div style="text-align:right;">
+                          <div class="deal-amount">$85,000</div>
+                          <div class="deal-updated">Mar 31, 17:20</div>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="company-list-item">
+                      <div class="row-grow" style="align-items:flex-start;">
+                        <div>
+                          <strong>Email automation pilot</strong>
+                          <div class="muted">New</div>
+                        </div>
+                        <div style="text-align:right;">
+                          <div class="deal-amount">$25,000</div>
+                          <div class="deal-updated">Mar 29, 10:35</div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="company-note muted" id="company-detail-note">Last activity &bull; Apr 2, 13:40</div>
+            </section>
+
+          <section class="card">
+            <div class="section-header">
+              <div><h3 class="section-title">Stage distribution</h3><p class="muted">Where company opportunities sit in the funnel.</p></div>
+            </div>
+            <div class="row wrap">
+              <div class="stage-card"><span class="stage-label">Negotiation</span><strong>6</strong><p class="muted">open deals</p></div>
+              <div class="stage-card"><span class="stage-label">Proposal</span><strong>5</strong><p class="muted">open deals</p></div>
+              <div class="stage-card"><span class="stage-label">Qualified</span><strong>7</strong><p class="muted">open deals</p></div>
+              <div class="stage-card"><span class="stage-label">New</span><strong>6</strong><p class="muted">open deals</p></div>
+            </div>
+          </section>
+        </section>
+
+                    <section data-view="company-profile" hidden>
+            <div class="card">
+              <div class="profile-header">
+                <div class="row" style="gap:12px;align-items:center;">
+                  <button class="ghost" type="button">&larr; Back to companies</button>
+                  <h2 id="profile-name" style="margin:0;">Globex Corporation</h2>
+                </div>
+                <div class="row wrap" style="gap:8px;">
+                  <button class="ghost" type="button">Send email</button>
+                  <button class="ghost" type="button">Log call</button>
+                  <button class="ghost" type="button">Book meeting</button>
+                  <button class="primary" type="button">Add task</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="company-profile-layout">
+              <aside class="card profile-sidebar">
+                <div class="muted">Pipeline value</div>
+                <h3 id="profile-pipeline" style="margin:4px 0 12px;">$145,000</h3>
+                <div class="profile-stat-grid">
+                  <div><div class="muted">Open deals</div><strong id="profile-open-deals">5</strong></div>
+                  <div><div class="muted">Owners</div><strong id="profile-owners">Ava</strong></div>
+                  <div><div class="muted">Stage</div><strong id="profile-stage">Negotiation</strong></div>
+                  <div><div class="muted">Last activity</div><strong id="profile-last">Apr 2, 13:40</strong></div>
+                </div>
+                <p id="profile-summary" style="margin-top:10px;">Opportunities are concentrated in negotiation with 5 active deals worth $145,000.</p>
+              </aside>
+
+              <section class="card profile-main">
+                <div class="section-header">
+                  <div>
+                    <h3 class="section-title">Recent activity</h3>
+                    <p class="muted">Track emails, calls, and tasks logged against this account.</p>
+                  </div>
+                  <div class="row wrap">
+                    <button class="ghost" type="button">Filter activity</button>
+                    <button class="ghost" type="button">All users</button>
+                  </div>
+                </div>
+                <div class="timeline" id="profile-timeline">
+                  <div class="timeline-day">
+                    <div class="timeline-date">Apr 2</div>
+                    <div class="timeline-card">
+                      <strong>Call logged</strong>
+                      <p class="muted">Ava spoke with Victor about pricing. Follow-up demo scheduled for Apr 8.</p>
+                    </div>
+                  </div>
+                  <div class="timeline-day">
+                    <div class="timeline-date">Mar 29</div>
+                    <div class="timeline-card">
+                      <strong>Email sent</strong>
+                      <p class="muted">Recap deck delivered to buying committee. Waiting on budget approval.</p>
+                    </div>
+                  </div>
+                  <div class="timeline-day">
+                    <div class="timeline-date">Mar 24</div>
+                    <div class="timeline-card">
+                      <strong>Task completed</strong>
+                      <p class="muted">Onboarding questionnaire shared with operations team.</p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <aside class="card profile-meta">
+                <div>
+                  <h4 style="margin-bottom:6px;">Quick links</h4>
+                  <ul class="profile-links">
+                    <li><button class="ghost" type="button">Company notes</button></li>
+                    <li><button class="ghost" type="button">View tasks</button></li>
+                    <li><button class="ghost" type="button">Related deals</button></li>
+                    <li><button class="ghost" type="button">Attachments</button></li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 style="margin-bottom:6px;">Lifecycle</h4>
+                  <p class="muted" id="profile-lifecycle">Currently in <strong>Negotiation</strong> with 5 open opportunities.</p>
+                  <p class="muted" id="profile-last-touch">Last touched by Ava.</p>
+                </div>
+              </aside>
+            </div>
+
+            <section class="card">
+              <div class="section-header">
+                <div>
+                  <h3 class="section-title">Key contacts</h3>
+                  <p class="muted">People you collaborate with most frequently.</p>
+                </div>
+              </div>
+              <div class="profile-grid" id="profile-contacts">
+                <div class="profile-contact">
+                  <strong>Ava Nowak</strong>
+                  <div class="muted">Operations lead</div>
+                  <div class="muted">ava.nowak@example.com</div>
+                  <div class="muted">+48 123 456 789</div>
+                  <div class="muted" style="font-size:12px;">Updated Mar 31, 11:05</div>
+                  <div class="row wrap" style="gap:6px;margin-top:8px;">
+                    <button class="ghost" type="button">Email</button>
+                    <button class="ghost" type="button">Call</button>
+                    <button class="ghost" type="button">Log note</button>
+                  </div>
+                </div>
+                <div class="profile-contact">
+                  <strong>Victor Chen</strong>
+                  <div class="muted">CTO</div>
+                  <div class="muted">victor.chen@globex.com</div>
+                  <div class="muted">+48 345 987 654</div>
+                  <div class="muted" style="font-size:12px;">Updated Mar 29, 08:12</div>
+                  <div class="row wrap" style="gap:6px;margin-top:8px;">
+                    <button class="ghost" type="button">Email</button>
+                    <button class="ghost" type="button">Call</button>
+                    <button class="ghost" type="button">Log note</button>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="card">
+              <div class="section-header">
+                <div>
+                  <h3 class="section-title">Open deals</h3>
+                  <p class="muted">Keep momentum on every opportunity.</p>
+                </div>
+              </div>
+              <div class="profile-grid" id="profile-deals">
+                <div class="profile-deal">
+                  <div class="row-grow">
+                    <strong>Enterprise support expansion</strong>
+                    <div class="deal-amount">$85,000</div>
+                  </div>
+                  <div class="muted">Stage • Negotiation</div>
+                  <div class="muted">Owner • Ava</div>
+                  <div class="muted">Updated • Mar 31, 17:20</div>
+                  <div class="row wrap" style="gap:6px;margin-top:8px;">
+                    <button class="ghost" type="button">View deal</button>
+                    <button class="ghost" type="button">Move stage</button>
+                  </div>
+                </div>
+                <div class="profile-deal">
+                  <div class="row-grow">
+                    <strong>Email automation pilot</strong>
+                    <div class="deal-amount">$25,000</div>
+                  </div>
+                  <div class="muted">Stage • New</div>
+                  <div class="muted">Owner • Ava</div>
+                  <div class="muted">Updated • Mar 29, 10:35</div>
+                  <div class="row wrap" style="gap:6px;margin-top:8px;">
+                    <button class="ghost" type="button">View deal</button>
+                    <button class="ghost" type="button">Move stage</button>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </section><section data-view="deals" hidden>
+            <div class="card">
+              <div class="section-header">
+                <div>
+                  <h3 class="section-title">Create deal</h3>
+                  <p class="muted">Log a new opportunity in seconds.</p>
+                </div>
+              </div>
+              <div class="row wrap">
+                <input placeholder="Deal name" />
+                <input placeholder="Amount" type="number" min="0" />
+                <select>
+                  <option>Sales Pipeline</option>
+                  <option>Customer Success</option>
+                </select>
+                <select>
+                  <option>New</option>
+                  <option>Qualified</option>
+                  <option>Proposal</option>
+                  <option>Negotiation</option>
+                  <option>Won</option>
+                  <option>Lost</option>
+                </select>
+                <input placeholder="Company" />
+                <input placeholder="Owner" />
+                <button class="primary" type="button">Add deal</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="section-header">
+                <div>
+                  <h3 class="section-title">Pipeline board</h3>
+                  <p class="muted">Move deals forward and keep momentum.</p>
+                </div>
+              </div>
+              <div class="kanban">
+                <div class="column">
+                  <div class="column-header"><b>New</b><span class="muted">$65,000</span></div>
+                  <div class="deal">
+                    <div class="row-grow">
+                      <div><strong>Email automation pilot</strong><div class="deal-company">Globex</div></div>
+                      <div>
+                        <div class="deal-amount">$25,000</div>
+                        <div class="deal-updated">Mar 29, 10:35</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="deal">
+                    <div class="row-grow">
+                      <div><strong>Website redesign</strong><div class="deal-company">Acme</div></div>
+                      <div>
+                        <div class="deal-amount">$40,000</div>
+                        <div class="deal-updated">Mar 30, 09:10</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="column">
+                  <div class="column-header"><b>Qualified</b><span class="muted">$84,000</span></div>
+                  <div class="deal">
+                    <div class="row-grow">
+                      <div><strong>Field enablement suite</strong><div class="deal-company">Initech</div></div>
+                      <div>
+                        <div class="deal-amount">$32,000</div>
+                        <div class="deal-updated">Mar 28, 14:22</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="deal">
+                    <div class="row-grow">
+                      <div><strong>Predictive dashboards</strong><div class="deal-company">Stark Industries</div></div>
+                      <div>
+                        <div class="deal-amount">$52,000</div>
+                        <div class="deal-updated">Mar 30, 16:48</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="column">
+                  <div class="column-header"><b>Proposal</b><span class="muted">$120,000</span></div>
+                  <div class="deal">
+                    <div class="row-grow">
+                      <div><strong>Security revamp</strong><div class="deal-company">Wayne Enterprises</div></div>
+                      <div>
+                        <div class="deal-amount">$66,000</div>
+                        <div class="deal-updated">Mar 28, 11:05</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="deal">
+                    <div class="row-grow">
+                      <div><strong>Lifecycle marketing</strong><div class="deal-company">Wonka Labs</div></div>
+                      <div>
+                        <div class="deal-amount">$54,000</div>
+                        <div class="deal-updated">Mar 27, 09:51</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="column">
+                  <div class="column-header"><b>Negotiation</b><span class="muted">$100,000</span></div>
+                  <div class="deal">
+                    <div class="row-grow">
+                      <div><strong>Enterprise support expansion</strong><div class="deal-company">Globex</div></div>
+                      <div>
+                        <div class="deal-amount">$85,000</div>
+                        <div class="deal-updated">Mar 31, 17:20</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="deal">
+                    <div class="row-grow">
+                      <div><strong>Ops analytics rollout</strong><div class="deal-company">Stark Industries</div></div>
+                      <div>
+                        <div class="deal-amount">$15,000</div>
+                        <div class="deal-updated">Mar 30, 13:44</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="column">
+                  <div class="column-header"><b>Won</b><span class="muted">$59,000</span></div>
+                  <div class="deal">
+                    <div class="row-grow">
+                      <div><strong>Customer success suite</strong><div class="deal-company">Pied Piper</div></div>
+                      <div>
+                        <div class="deal-amount">$34,000</div>
+                        <div class="deal-updated">Mar 24, 08:17</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="deal">
+                    <div class="row-grow">
+                      <div><strong>Quarterly training</strong><div class="deal-company">Acme</div></div>
+                      <div>
+                        <div class="deal-amount">$25,000</div>
+                        <div class="deal-updated">Mar 26, 15:02</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section data-view="contacts" hidden>
+            <div class="card">
+              <div class="section-header">
+                <div><h3 class="section-title">Contacts</h3><p class="muted">Search your network and add new relationships.</p></div>
+                <div class="row wrap">
+                  <input placeholder="Search contacts..." />
+                  <button class="ghost" type="button">Search</button>
+                </div>
+              </div>
+              <div class="row wrap">
+                <input placeholder="First name" />
+                <input placeholder="Last name" />
+                <input placeholder="Email" />
+                <input placeholder="Phone" />
+                <input placeholder="Company" />
+                <button class="primary" type="button" onclick="navigateToNewContact()">Add contact</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="section-header">
+                <div><h3 class="section-title">Directory</h3><p class="muted">Recently updated contacts first.</p></div>
+              </div>
+              <table>
+                <thead>
+                  <tr><th>Name</th><th>Email</th><th>Phone</th><th>Company</th><th class="right">Updated</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Ava Nowak</td><td>ava.nowak@example.com</td><td>+48 123 456 789</td><td>Acme</td><td class="right">Mar 31, 11:05</td></tr>
+                  <tr><td>Jan Kowalski</td><td>jan.kowalski@example.com</td><td>+48 987 654 321</td><td>Globex</td><td class="right">Mar 30, 16:20</td></tr>
+                  <tr><td>Ola Zielinska</td><td>ola.z@example.com</td><td>+48 555 222 111</td><td>Initech</td><td class="right">Mar 28, 09:45</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section data-view="tasks" hidden>
+            <section class="metric-grid">
+              <div class="card metric-card"><div class="metric-label">All tasks</div><div class="metric-value">18</div><div class="metric-sub">Total follow-ups logged</div></div>
+              <div class="card metric-card"><div class="metric-label">Open</div><div class="metric-value">12</div><div class="metric-sub">Awaiting action</div></div>
+              <div class="card metric-card"><div class="metric-label">Due today</div><div class="metric-value">3</div><div class="metric-sub">Planned for the next 24 hours</div></div>
+              <div class="card metric-card"><div class="metric-label">Overdue</div><div class="metric-value">2</div><div class="metric-sub">Past due and still open</div></div>
+            </section>
+
+            <section class="card">
+              <div class="section-header">
+                <div><h3 class="section-title">Upcoming</h3><p class="muted">Next six follow-ups ordered by due date.</p></div>
+                <button class="ghost" type="button">Refresh tasks</button>
+              </div>
+              <div class="list">
+                <div class="task-item"><strong>Send renewal proposal</strong><div class="muted">Due Apr 2, 10:00</div><div class="row wrap" style="margin-top:6px;"><span class="pill">open</span><span class="pill">Owner: Ava</span><span class="pill">Related: deal</span></div></div>
+                <div class="task-item"><strong>Prep discovery agenda</strong><div class="muted">Due Apr 3, 09:30</div><div class="row wrap" style="margin-top:6px;"><span class="pill">open</span><span class="pill">Owner: Jan</span></div></div>
+                <div class="task-item"><strong>Email call recap</strong><div class="muted">Due Apr 4, 16:00</div><div class="row wrap" style="margin-top:6px;"><span class="pill">open</span><span class="pill">Owner: Ola</span></div></div>
+              </div>
+            </section>
+
+            <section class="card">
+              <div class="section-header">
+                <div><h3 class="section-title">Task board</h3><p class="muted">Full task list with quick status insight.</p></div>
+              </div>
+              <table>
+                <thead>
+                  <tr><th>Subject</th><th>Due</th><th>Owner</th><th>Status</th><th class="right">Created</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Send renewal proposal</td><td>Apr 2, 10:00</td><td>Ava</td><td>open</td><td class="right">Mar 28, 09:12</td></tr>
+                  <tr><td>Prep discovery agenda</td><td>Apr 3, 09:30</td><td>Jan</td><td>open</td><td class="right">Mar 29, 14:08</td></tr>
+                  <tr><td>Email call recap</td><td>Apr 4, 16:00</td><td>Ola</td><td>open</td><td class="right">Mar 30, 11:27</td></tr>
+                  <tr><td>Schedule onboarding</td><td>Apr 5, 13:00</td><td>Ava</td><td>open</td><td class="right">Mar 28, 08:15</td></tr>
+                  <tr><td>Close lost feedback</td><td>Apr 1, 12:00</td><td>Jan</td><td>overdue</td><td class="right">Mar 26, 10:42</td></tr>
+                </tbody>
+              </table>
+            </section>
+          </section>
+
+          <section data-view="settings" hidden>
+            <div class="card">
+              <div class="section-header">
+                <div><h3 class="section-title">Workspace preferences</h3><p class="muted">Configure appearance, defaults, and sharing.</p></div>
+              </div>
+              <div class="list">
+                <div class="task-item"><strong>Theme</strong><div class="muted">Dark emerald &bull; Optimised for focus</div></div>
+                <div class="task-item"><strong>Default pipeline</strong><div class="muted">Sales Pipeline</div></div>
+                <div class="task-item"><strong>Notifications</strong><div class="muted">Daily digest, mention alerts</div></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="section-header">
+                <div><h3 class="section-title">Automation toggles</h3><p class="muted">Keep routine work off your team's plate.</p></div>
+              </div>
+              <div class="row wrap">
+                <button class="primary" type="button">Enable deal reminders</button>
+                <button class="ghost" type="button">Manage integrations</button>
+                <button class="ghost" type="button">Audit log</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="section-header">
+                <div><h3 class="section-title">Team access</h3><p class="muted">Control who can update deals, contacts, and settings.</p></div>
+              </div>
+              <table>
+                <thead>
+                  <tr><th>Role</th><th>Members</th><th>Permissions</th><th class="right">Last change</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Admins</td><td>3</td><td>All access</td><td class="right">Mar 28, 14:21</td></tr>
+                  <tr><td>Sales</td><td>12</td><td>Deals, contacts, tasks</td><td class="right">Mar 30, 09:35</td></tr>
+                  <tr><td>CS</td><td>6</td><td>Accounts, tasks</td><td class="right">Mar 27, 18:02</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      const COPY = {
+        dashboard: "Monitor revenue health, tasks, and top deals.",
+        companies: "Track account health and engagement at a glance.",
+        contacts: "Grow relationships and keep details current.",
+        deals: "Move opportunities forward across every stage.",
+        tasks: "Prioritise follow-ups and stay on schedule.",
+        settings: "Tune Salesesy to match your team\'s workflow."
+      };
+
+      const root = document.body;
+      const themeToggle = document.querySelector(".theme-toggle");
+
+      const applyTheme = (mode) => {
+        const next = mode === "light" ? "light" : "dark";
+        root.classList.remove("theme-light", "theme-dark");
+        root.classList.add(`theme-${next}`);
+        if (themeToggle) {
+          themeToggle.classList.remove("light", "dark");
+          themeToggle.classList.add(next);
+          const label = next === "light" ? "Switch to dark mode" : "Switch to light mode";
+          themeToggle.setAttribute("aria-label", label);
+          themeToggle.setAttribute("title", label);
+        }
+        if (typeof window !== "undefined") {
+          try {
+            window.localStorage.setItem("salesesy-theme", next);
+          } catch (error) {
+            /* ignore */
+          }
+        }
+      };
+
+      const storedTheme = (() => {
+        if (typeof window === "undefined") return null;
+        try {
+          return window.localStorage.getItem("salesesy-theme");
+        } catch (error) {
+          return null;
+        }
+      })();
+      applyTheme(storedTheme === "light" ? "light" : "dark");
+
+      if (themeToggle) {
+        themeToggle.addEventListener("click", () => {
+          const next = themeToggle.classList.contains("dark") ? "light" : "dark";
+          applyTheme(next);
+        });
+      }
+
+const navButtons = document.querySelectorAll(".nav-link[data-tab]");
+const views = document.querySelectorAll("[data-view]");
+const title = document.getElementById("page-title");
+const subtitle = document.getElementById("page-sub");
+
+window.navigateToNewContact = function navigateToNewContact() {
+  window.location.href = "./preview-pages/new-contact.html";
+};
+
+navButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const target = button.dataset.tab;
+          navButtons.forEach((btn) => btn.classList.toggle("active", btn === button));
+          views.forEach((section) => {
+            section.hidden = section.dataset.view !== target;
+          });
+          title.textContent = button.textContent.trim();
+          subtitle.textContent = COPY[target] || COPY.dashboard;
+        });
+      });
+
+      const companyProfiles = {
+        globex: {
+          name: "Globex Corporation",
+          owners: "Ava",
+          summary: "Negotiation &bull; $145,000 pipeline &bull; Owners Ava",
+          lastActivity: "Apr 2, 13:40",
+          contactsCount: "4 contacts",
+          dealsCount: "5 deals",
+          pipelineValue: "$145,000 pipeline",
+          stages: [
+            { name: "Negotiation", count: 2 },
+            { name: "Proposal", count: 1 },
+            { name: "Qualified", count: 1 },
+            { name: "New", count: 1 }
+          ],
+          contacts: [
+            { name: "Ava Nowak", role: "Operations lead", email: "ava.nowak@example.com", phone: "+48 123 456 789", updated: "Mar 31, 11:05" },
+            { name: "Victor Chen", role: "CTO", email: "victor.chen@globex.com", phone: "+48 345 987 654", updated: "Mar 29, 08:12" }
+          ],
+          deals: [
+            { name: "Enterprise support expansion", stage: "Negotiation", amount: "$85,000", updated: "Mar 31, 17:20", owner: "Ava" },
+            { name: "Email automation pilot", stage: "New", amount: "$25,000", updated: "Mar 29, 10:35", owner: "Ava" }
+          ]
+        },
+        acme: {
+          name: "Acme Inc.",
+          owners: "Ola",
+          summary: "Proposal &bull; $120,000 pipeline &bull; Owners Ola",
+          lastActivity: "Apr 1, 09:24",
+          contactsCount: "3 contacts",
+          dealsCount: "4 deals",
+          pipelineValue: "$120,000 pipeline",
+          stages: [
+            { name: "Proposal", count: 2 },
+            { name: "Negotiation", count: 1 },
+            { name: "Qualified", count: 1 }
+          ],
+          contacts: [
+            { name: "Ola Zielinska", role: "Marketing lead", email: "ola.z@example.com", phone: "+48 555 222 111", updated: "Mar 28, 09:45" },
+            { name: "Sam Lee", role: "CFO", email: "sam.lee@acme.com", phone: "+48 444 333 111", updated: "Mar 27, 12:45" }
+          ],
+          deals: [
+            { name: "Website redesign", stage: "Proposal", amount: "$40,000", updated: "Mar 30, 09:10", owner: "Ola" },
+            { name: "Quarterly training", stage: "Won", amount: "$25,000", updated: "Mar 26, 15:02", owner: "Ola" }
+          ]
+        },
+        initech: {
+          name: "Initech",
+          owners: "Jan",
+          summary: "Qualified &bull; $84,000 pipeline &bull; Owners Jan",
+          lastActivity: "Mar 31, 17:55",
+          contactsCount: "2 contacts",
+          dealsCount: "3 deals",
+          pipelineValue: "$84,000 pipeline",
+          stages: [
+            { name: "Qualified", count: 2 },
+            { name: "Proposal", count: 1 }
+          ],
+          contacts: [
+            { name: "Jan Kowalski", role: "Account executive", email: "jan.kowalski@example.com", phone: "+48 987 654 321", updated: "Mar 30, 16:20" }
+          ],
+          deals: [
+            { name: "Field enablement suite", stage: "Qualified", amount: "$32,000", updated: "Mar 28, 14:22", owner: "Jan" },
+            { name: "Platform rollout", stage: "Qualified", amount: "$52,000", updated: "Mar 29, 17:55", owner: "Jan" }
+          ]
+        },
+        stark: {
+          name: "Stark Industries",
+          owners: "Ava",
+          summary: "Proposal &bull; $52,000 pipeline &bull; Owners Ava",
+          lastActivity: "Mar 30, 16:48",
+          contactsCount: "5 contacts",
+          dealsCount: "2 deals",
+          pipelineValue: "$52,000 pipeline",
+          stages: [
+            { name: "Proposal", count: 1 },
+            { name: "Negotiation", count: 1 }
+          ],
+          contacts: [
+            { name: "Pepper Potts", role: "COO", email: "pepper@stark.com", phone: "+1 555 0100", updated: "Mar 30, 16:48" },
+            { name: "Tony Stark", role: "CTO", email: "tony@stark.com", phone: "+1 555 0101", updated: "Mar 29, 11:20" }
+          ],
+          deals: [
+            { name: "Predictive dashboards", stage: "Proposal", amount: "$52,000", updated: "Mar 30, 16:48", owner: "Ava" }
+          ]
+        },
+        wayne: {
+          name: "Wayne Enterprises",
+          owners: "Ola",
+          summary: "Negotiation &bull; $37,000 pipeline &bull; Owners Ola",
+          lastActivity: "Mar 29, 14:10",
+          contactsCount: "1 contact",
+          dealsCount: "1 deal",
+          pipelineValue: "$37,000 pipeline",
+          stages: [
+            { name: "Negotiation", count: 1 }
+          ],
+          contacts: [
+            { name: "Bruce Wayne", role: "CEO", email: "bruce@wayneenterprises.com", phone: "+1 555 0199", updated: "Mar 29, 14:10" }
+          ],
+          deals: [
+            { name: "Security revamp", stage: "Negotiation", amount: "$37,000", updated: "Mar 29, 14:10", owner: "Ola" }
+          ]
+        }
+      };      const spotlightName = document.getElementById("spotlight-name");
+      const spotlightActivity = document.getElementById("spotlight-activity");
+      const spotlightContacts = document.getElementById("spotlight-contacts");
+      const spotlightDeals = document.getElementById("spotlight-deals");
+      const spotlightValue = document.getElementById("spotlight-value");
+      const spotlightStages = document.getElementById("spotlight-stages");
+
+      const detailName = document.getElementById("company-detail-name");
+      const detailSummary = document.getElementById("company-detail-summary");
+      const detailNote = document.getElementById("company-detail-note");
+      const detailContacts = document.getElementById("company-detail-contacts");
+      const detailDeals = document.getElementById("company-detail-deals");
+      const companyRows = document.querySelectorAll(".company-row");
+      const computeInitials = (name = "") => {
+        const parts = name.trim().split(/\s+/).filter(Boolean);
+        if (!parts.length) return "";
+        const first = parts[0][0] || "";
+        const second = parts.length > 1 ? parts[parts.length - 1][0] : parts[0][1] || "";
+        return (first + (second || "")).toUpperCase();
+      };
+      companyRows.forEach((row) => {
+        const badge = row.querySelector(".company-initial");
+        const nameEl = row.querySelector("strong");
+        if (badge && nameEl) {
+          badge.textContent = computeInitials(nameEl.textContent);
+        }
+      });
+
+      const renderStageChips = (container, stages) => {
+        container.innerHTML = "";
+        if (!stages.length) {
+          const empty = document.createElement("div");
+          empty.className = "muted";
+          empty.textContent = "No open deals yet.";
+          container.appendChild(empty);
+          return;
+        }
+        stages.forEach(({ name, count }) => {
+          const chip = document.createElement("div");
+          chip.className = "stage-chip";
+          const nameEl = document.createElement("span");
+          nameEl.textContent = name;
+          const countEl = document.createElement("b");
+          countEl.textContent = count;
+          chip.appendChild(nameEl);
+          chip.appendChild(countEl);
+          container.appendChild(chip);
+        });
+      };
+
+      const renderList = (list, items, emptyLabel) => {
+        list.innerHTML = "";
+        if (!items.length) {
+          const empty = document.createElement("li");
+          empty.className = "company-list-item muted";
+          empty.textContent = emptyLabel;
+          list.appendChild(empty);
+          return;
+        }
+        items.forEach((item) => {
+          const li = document.createElement("li");
+          li.className = "company-list-item";
+          li.innerHTML = item;
+          list.appendChild(li);
+        });
+      };
+
+      const renderCompany = (key) => {
+        const profile = companyProfiles[key];
+        if (!profile) return;
+
+        companyRows.forEach((row) => {
+          row.classList.toggle("selected", row.dataset.company === key);
+        });
+
+        spotlightName.textContent = profile.name;
+        spotlightActivity.textContent = `Last activity &bull; ${profile.lastActivity}`;
+        spotlightContacts.textContent = profile.contactsCount;
+        spotlightDeals.textContent = profile.dealsCount;
+        spotlightValue.textContent = profile.pipelineValue;
+        renderStageChips(spotlightStages, profile.stages);
+
+        detailName.textContent = profile.name;
+        detailSummary.textContent = profile.summary;
+        detailNote.textContent = `Last activity &bull; ${profile.lastActivity}`;
+
+        const profileNavLabel = document.querySelector(".nav-link[data-tab=\"company-profile\"] span:nth-child(3)");
+        if (profileNavLabel) {
+          profileNavLabel.textContent = `${profile.name} Profile`;
+        }
+
+
+        const stageName = profile.stages[0]?.name || "No open stage";
+        const openDealsCount = profile.deals.length;
+        const pipelineValue = profile.pipelineValue.replace(/\spipeline$/, "");
+        const owners = profile.owners || "Unassigned";
+
+        document.getElementById("profile-name").textContent = profile.name;
+        document.getElementById("profile-pipeline").textContent = pipelineValue;
+        document.getElementById("profile-open-deals").textContent = openDealsCount.toString();
+        document.getElementById("profile-owners").textContent = owners;
+        document.getElementById("profile-stage").textContent = stageName;
+        document.getElementById("profile-last").textContent = profile.lastActivity;
+        document.getElementById("profile-summary").textContent = openDealsCount
+          ? `Opportunities are concentrated in ${stageName.toLowerCase()} with ${openDealsCount} active deals worth ${pipelineValue}.`
+          : "No active opportunities yet. Add a deal to start building momentum.";
+        document.getElementById("profile-lifecycle").innerHTML = `Currently in <strong>${stageName}</strong> with ${openDealsCount} open opportunities.`;
+        document.getElementById("profile-last-touch").textContent = `Last touched by ${owners}.`;
+        renderList(
+          detailContacts,
+          profile.contacts.map(
+            (contact) =>
+              `<strong>${contact.name}</strong><div class="muted">${contact.role || "No role provided"}</div><div class="muted">${contact.email || "No email"}</div><div class="muted">${contact.phone || "No phone"}</div>`
+          ),
+          "No contacts stored for this company yet."
+        );
+        renderList(
+          detailDeals,
+          profile.deals.map(
+            (deal) =>
+              `<div class="row-grow" style="align-items:flex-start;"><div><strong>${deal.name}</strong><div class="muted">${deal.stage}</div></div><div style="text-align:right;"><div class="deal-amount">${deal.amount}</div><div class="deal-updated">${deal.updated}</div></div></div>`
+          ),
+          "No active deals. Create one to get started."
+        );
+
+        const profileContacts = document.getElementById("profile-contacts");
+        if (profile.contacts.length) {
+          profileContacts.innerHTML = profile.contacts
+            .map(
+              (contact) => `
+                <div class="profile-contact">
+                  <strong>${contact.name}</strong>
+                  <div class="muted">${contact.role || "No role provided"}</div>
+                  <div class="muted">${contact.email || "No email on file"}</div>
+                  <div class="muted">${contact.phone || "No phone on file"}</div>
+                  <div class="muted" style="font-size:12px;">Updated ${contact.updated || "Not recorded"}</div>
+                  <div class="row wrap" style="gap:6px;margin-top:8px;">
+                    <button class="ghost" type="button">Email</button>
+                    <button class="ghost" type="button">Call</button>
+                    <button class="ghost" type="button">Log note</button>
+                  </div>
+                </div>
+              `
+            )
+            .join("");
+        } else {
+          profileContacts.innerHTML = '<div class="empty">No contacts synced for this company.</div>';
+        }
+
+        const profileDeals = document.getElementById("profile-deals");
+        if (profile.deals.length) {
+          profileDeals.innerHTML = profile.deals
+            .map(
+              (deal) => `
+                <div class="profile-deal">
+                  <div class="row-grow">
+                    <strong>${deal.name}</strong>
+                    <div class="deal-amount">${deal.amount}</div>
+                  </div>
+                  <div class="muted">Stage • ${deal.stage}</div>
+                  <div class="muted">Owner • ${deal.owner || "Unassigned"}</div>
+                  <div class="muted">Updated • ${deal.updated}</div>
+                  <div class="row wrap" style="gap:6px;margin-top:8px;">
+                    <button class="ghost" type="button">View deal</button>
+                    <button class="ghost" type="button">Move stage</button>
+                  </div>
+                </div>
+              `
+            )
+            .join("");
+        } else {
+          profileDeals.innerHTML = '<div class="empty">There are no open deals for this company.</div>';
+        }
+      };
+
+      companyRows.forEach((row) => {
+        row.addEventListener("click", () => renderCompany(row.dataset.company));
+      });
+      const defaultCompany = companyRows[0]?.dataset.company || Object.keys(companyProfiles)[0];
+      if (defaultCompany) renderCompany(defaultCompany);
+    </script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,571 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Contact &middot; Salesesy Preview</title>
+    <link rel="icon" type="image/svg+xml" href="../src/assets/salesesy-logo.svg" />
+    <style>
+      :root {
+        font-family: "Inter", system-ui, Arial, sans-serif;
+        --bg: #050f09;
+        --bg-alt: radial-gradient(circle at top left, rgba(34, 197, 94, 0.16), transparent 55%);
+        --sunken: rgba(6, 23, 14, 0.9);
+        --panel: rgba(10, 27, 18, 0.95);
+        --border: rgba(34, 84, 49, 0.45);
+        --border-strong: rgba(61, 132, 89, 0.6);
+        --text: #f5fff7;
+        --text-soft: #dbe7de;
+        --muted: #8fa999;
+        --accent: #22c55e;
+        --accent-hover: #4ade80;
+        --accent-dark: #15803d;
+        --accent-border-soft: rgba(56, 189, 120, 0.35);
+        --danger: #ef4444;
+        --ghost-button-bg: rgba(7, 21, 13, 0.9);
+        --ghost-button-border: rgba(38, 92, 54, 0.6);
+        --input-bg: rgba(8, 24, 15, 0.92);
+        --input-border: rgba(36, 88, 52, 0.55);
+        --primary-text: #042b14;
+      }
+
+      body.theme-light {
+        --bg: #f7f9fb;
+        --bg-alt: radial-gradient(circle at top left, rgba(37, 99, 235, 0.14), transparent 55%);
+        --sunken: rgba(255, 255, 255, 0.96);
+        --panel: rgba(255, 255, 255, 0.97);
+        --border: rgba(148, 163, 184, 0.5);
+        --border-strong: rgba(100, 116, 139, 0.65);
+        --text: #0f172a;
+        --text-soft: #1e293b;
+        --muted: #475569;
+        --accent: #2563eb;
+        --accent-hover: #60a5fa;
+        --accent-dark: #1d4ed8;
+        --accent-border-soft: rgba(37, 99, 235, 0.28);
+        --danger: #ef4444;
+        --ghost-button-bg: rgba(236, 244, 255, 0.9);
+        --ghost-button-border: rgba(148, 163, 184, 0.55);
+        --input-bg: rgba(248, 250, 252, 0.95);
+        --input-border: rgba(191, 219, 254, 0.6);
+        --primary-text: #eff6ff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        background-image: var(--bg-alt);
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .page-chrome {
+        position: fixed;
+        top: 24px;
+        left: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        align-items: flex-start;
+        z-index: 20;
+      }
+
+      .theme-toggle {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 60px;
+        height: 28px;
+        padding: 4px 6px;
+        border-radius: 999px;
+        border: 1px solid var(--border-strong);
+        background: var(--panel);
+        cursor: pointer;
+        transition: border-color 0.2s ease, background 0.2s ease;
+      }
+      .theme-toggle .toggle-thumb {
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.35);
+        transition: transform 0.25s ease;
+      }
+      .theme-toggle .icon {
+        display: inline-flex;
+        color: var(--muted);
+        visibility: hidden;
+        opacity: 0;
+        transition: color 0.2s ease, opacity 0.2s ease;
+      }
+      .theme-toggle.dark .icon.moon,
+      .theme-toggle.light .icon.sun {
+        color: var(--accent);
+        visibility: visible;
+        opacity: 1;
+      }
+      .theme-toggle.dark .icon.sun,
+      .theme-toggle.light .icon.moon {
+        visibility: hidden;
+        opacity: 0;
+      }
+      .theme-toggle.light .toggle-thumb {
+        transform: translateX(30px);
+      }
+      .theme-toggle:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      .brand-link {
+        text-decoration: none;
+        color: inherit;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .brand-title {
+        margin: 0;
+        font-size: 1.4rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+      }
+      .brand-sub {
+        font-size: 0.72rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      header {
+        padding: 120px 32px 24px;
+      }
+      header h1 {
+        margin: 0 0 4px;
+      }
+      header p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      main {
+        flex: 1;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 0 24px 48px;
+      }
+
+      .card {
+        width: min(720px, 100%);
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        box-shadow: 0 24px 48px rgba(0, 0, 0, 0.45);
+        padding: 32px;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .field-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+
+      label {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        flex: 1 1 220px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.78rem;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        border-radius: 12px;
+        border: 1px solid var(--input-border);
+        background: var(--input-bg);
+        color: var(--text);
+        padding: 12px 14px;
+        font-size: 1rem;
+      }
+
+      input[readonly] {
+        background: rgba(36, 88, 52, 0.35);
+        border-color: rgba(36, 88, 52, 0.45);
+        color: var(--text-soft);
+        cursor: not-allowed;
+      }
+
+      textarea {
+        min-height: 96px;
+        resize: vertical;
+      }
+
+      .actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+      }
+
+      button {
+        border: 1px solid var(--border-strong);
+        border-radius: 12px;
+        padding: 12px 20px;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+        background: var(--ghost-button-bg);
+        color: var(--text-soft);
+      }
+      button:hover {
+        border-color: var(--accent-border-soft);
+      }
+      button:active {
+        transform: translateY(1px);
+      }
+      button.primary {
+        background: var(--accent);
+        color: var(--primary-text);
+        border-color: var(--accent-dark);
+        font-weight: 600;
+      }
+      button.primary:hover {
+        background: var(--accent-hover);
+      }
+      button.ghost {
+        background: var(--ghost-button-bg);
+        border-color: var(--ghost-button-border);
+      }
+
+      .alert {
+        border-radius: 12px;
+        padding: 14px 16px;
+        margin-top: -4px;
+        background: rgba(239, 68, 68, 0.18);
+        border: 1px solid rgba(239, 68, 68, 0.35);
+        color: var(--danger);
+        display: none;
+      }
+      .alert.success {
+        background: rgba(34, 197, 94, 0.18);
+        border-color: rgba(34, 197, 94, 0.38);
+        color: var(--accent-hover);
+      }
+
+      @media (max-width: 640px) {
+        .page-chrome {
+          top: 16px;
+          left: 16px;
+        }
+        header {
+          padding: 128px 20px 20px;
+        }
+        .card {
+          padding: 24px 20px;
+        }
+      }
+    </style>
+  </head>
+  <body class="theme-dark">
+    <div class="page-chrome">
+      <button class="theme-toggle dark" type="button" aria-label="Switch to light mode" title="Switch to light mode">
+        <span class="toggle-thumb"></span>
+        <span class="icon sun" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5" fill="currentColor" opacity="0.15"></circle>
+            <circle cx="12" cy="12" r="4" fill="none"></circle>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M5.64 18.36l1.42-1.42M16.94 6.64l1.42-1.42"></path>
+          </svg>
+        </span>
+        <span class="icon moon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 0 1 11.21 3 7 7 0 1 0 21 12.79Z"></path>
+          </svg>
+        </span>
+      </button>
+      <a class="brand brand-link" href="../preview.html">
+        <img src="../src/assets/salesesy-logo.svg" alt="Salesesy logo" width="36" height="36" style="filter: drop-shadow(0 4px 8px rgba(0,0,0,0.35));" />
+        <div>
+          <h2 class="brand-title">Salesesy</h2>
+          <div class="brand-sub">Growth CRM</div>
+        </div>
+      </a>
+    </div>
+    <header>
+      <h1>New Contact</h1>
+      <p>Fill in the form to add a contact and open the company page.</p>
+    </header>
+    <main>
+      <section class="card">
+        <form id="new-contact-form">
+          <div class="field-group">
+            <label>
+              Company name *
+              <input name="company" placeholder="Acme Inc." required />
+            </label>
+            <label>
+              First name *
+              <input name="first_name" placeholder="First name" required />
+            </label>
+            <label>
+              Last name
+              <input name="last_name" placeholder="Last name" />
+            </label>
+          </div>
+          <div class="field-group">
+            <label>
+              Job title
+              <input name="title" placeholder="e.g. VP of Sales" />
+            </label>
+            <label>
+              Email
+              <input name="email" type="email" placeholder="name@company.com" />
+            </label>
+            <label>
+              Phone number
+              <input name="phone" placeholder="+38 (0XX) XXX-XX-XX" />
+            </label>
+          </div>
+          <div class="field-group">
+            <label>
+              City
+              <input name="city" placeholder="City" />
+            </label>
+            <label>
+              Country
+              <input name="country" placeholder="Country" />
+            </label>
+            <label>
+              Company website
+              <input name="website" type="text" inputmode="url" placeholder="https://company.com" />
+            </label>
+          </div>
+          <label>
+            Address
+            <textarea name="address" placeholder="Street, building, city"></textarea>
+          </label>
+          <div id="status" class="alert"></div>
+          <div class="actions">
+            <button type="button" class="ghost" id="cancel-btn">Cancel</button>
+            <button type="submit" class="primary" id="submit-btn">Save</button>
+          </div>
+        </form>
+      </section>
+    </main>
+    <script>
+      const THEME_KEY = "salesesy-theme";
+      const body = document.body;
+      const themeToggle = document.querySelector(".theme-toggle");
+      const applyTheme = (value) => {
+        const next = value === "light" ? "light" : "dark";
+        body.classList.remove("theme-dark", "theme-light");
+        body.classList.add(`theme-${next}`);
+        if (themeToggle) {
+          themeToggle.classList.remove("dark", "light");
+          themeToggle.classList.add(next);
+          const label = next === "dark" ? "Switch to light mode" : "Switch to dark mode";
+          themeToggle.setAttribute("aria-label", label);
+          themeToggle.setAttribute("title", label);
+        }
+      };
+      applyTheme(window.localStorage.getItem(THEME_KEY));
+      if (themeToggle) {
+        themeToggle.addEventListener("click", () => {
+          const next = body.classList.contains("theme-dark") ? "light" : "dark";
+          window.localStorage.setItem(THEME_KEY, next);
+          applyTheme(next);
+        });
+      }
+
+      const storageKey = "preview-companies";
+      const escapeHtml = (value = "") =>
+        String(value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char] || char));
+      const slugify = (value, fallback) => {
+        if (!value) return fallback;
+        const slug = String(value)
+          .trim()
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, "")
+          .slice(0, 48);
+        return slug || fallback;
+      };
+
+      const form = document.getElementById("new-contact-form");
+      const statusBox = document.getElementById("status");
+      const submitBtn = document.getElementById("submit-btn");
+      const cancelBtn = document.getElementById("cancel-btn");
+      const companyInput = form?.querySelector('input[name="company"]');
+      const titleEl = document.querySelector("header h1");
+      const subtitleEl = document.querySelector("header p");
+      const params = new URLSearchParams(window.location.search);
+      const lockedSlug = (params.get("companySlug") || "").trim().toLowerCase();
+      const lockedNameParam = (params.get("companyName") || "").trim();
+      const legacyCompanyParam = (params.get("company") || "").trim();
+
+      let appendMode = false;
+      let companyLabel = lockedNameParam || legacyCompanyParam || "";
+
+      if (lockedSlug) {
+        const store = JSON.parse(window.localStorage.getItem(storageKey) || "{}");
+        const record = store[lockedSlug];
+        if (record) {
+          appendMode = true;
+          companyLabel = record.company || companyLabel;
+          if (titleEl) titleEl.textContent = "Add contact";
+          if (subtitleEl) {
+            subtitleEl.innerHTML = `New contact will be linked to <strong>${escapeHtml(companyLabel || "this company")}</strong>.`;
+          }
+          if (companyInput) {
+            companyInput.value = companyLabel || "";
+            companyInput.readOnly = true;
+            companyInput.setAttribute("aria-readonly", "true");
+          }
+        } else if (companyInput && companyLabel) {
+          companyInput.value = companyLabel;
+        }
+      } else if (companyInput && companyLabel) {
+        companyInput.value = companyLabel;
+      }
+
+      if (cancelBtn) {
+        cancelBtn.addEventListener("click", (event) => {
+          event.preventDefault();
+          if (appendMode && lockedSlug) {
+            window.location.href = `company.html?company=${encodeURIComponent(lockedSlug)}`;
+          } else {
+            window.location.href = "../preview.html";
+          }
+        });
+      }
+
+      const showStatus = (message, tone = "error") => {
+        statusBox.textContent = message;
+        statusBox.className = `alert ${tone === "success" ? "success" : ""}`;
+        statusBox.style.display = "block";
+      };
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        const company = companyInput?.value?.trim() || data.company.trim();
+        const firstName = data.first_name.trim();
+        const lastName = data.last_name.trim();
+        if (!company) {
+          showStatus("Please enter the company name.");
+          return;
+        }
+        if (!firstName && !lastName) {
+          showStatus("Please add either first or last name.");
+          return;
+        }
+        if (!data.email.trim() && !data.phone.trim()) {
+          showStatus("Provide at least an email or phone number.");
+          return;
+        }
+        submitBtn.disabled = true;
+        const payload = {
+          company,
+          first_name: firstName,
+          last_name: lastName,
+          title: data.title.trim(),
+          email: data.email.trim(),
+          phone: data.phone.trim(),
+          city: data.city.trim(),
+          country: data.country.trim(),
+          website: data.website.trim(),
+          address: data.address.trim(),
+          created_at: new Date().toISOString(),
+        };
+        const contactName = [firstName, lastName].filter(Boolean).join(" ").trim();
+        const contactEntry = {
+          id: slugify(data.email || contactName || `${Date.now()}`, `contact-${Date.now()}`),
+          name: contactName,
+          first_name: firstName,
+          last_name: lastName,
+          title: payload.title,
+          email: payload.email,
+          phone: payload.phone,
+          added_at: payload.created_at,
+          owner: "You",
+          relationship: payload.title,
+          primary: true,
+        };
+        const store = JSON.parse(window.localStorage.getItem(storageKey) || "{}");
+
+        if (appendMode && lockedSlug) {
+          const record = store[lockedSlug];
+          if (!record) {
+            submitBtn.disabled = false;
+            showStatus("This company could not be found. Refresh the company page and try again.");
+            return;
+          }
+          contactEntry.owner = record.owner || contactEntry.owner;
+          const contacts = Array.isArray(record.contacts) ? [...record.contacts] : [];
+          contactEntry.primary = contacts.length === 0;
+          if (contactEntry.primary) {
+            contacts.unshift(contactEntry);
+          } else {
+            contacts.push(contactEntry);
+          }
+          record.contacts = contacts;
+          if (!record.first_name && !record.last_name) {
+            record.first_name = firstName;
+            record.last_name = lastName;
+          }
+          if (!record.email && payload.email) record.email = payload.email;
+          if (!record.phone && payload.phone) record.phone = payload.phone;
+          if (!record.city && payload.city) record.city = payload.city;
+          if (!record.country && payload.country) record.country = payload.country;
+          record.updated_at = payload.created_at;
+          store[lockedSlug] = record;
+          window.localStorage.setItem(storageKey, JSON.stringify(store));
+          showStatus("Contact added. Redirecting to the company page\u2026", "success");
+          setTimeout(() => {
+            window.location.href = `company.html?company=${encodeURIComponent(lockedSlug)}`;
+          }, 600);
+          return;
+        }
+
+        const slug = slugify(company, "");
+        if (!slug) {
+          submitBtn.disabled = false;
+          showStatus("Unable to derive a company slug. Please adjust the company name.");
+          return;
+        }
+        contactEntry.primary = true;
+        payload.contacts = [contactEntry];
+        store[slug] = { ...payload };
+        window.localStorage.setItem(storageKey, JSON.stringify(store));
+        showStatus("Contact saved. Redirecting to the company page\u2026", "success");
+        setTimeout(() => {
+          window.location.href = `company.html?company=${encodeURIComponent(slug)}`;
+        }, 600);
+      });
+    </script>
+  </body>
+</html>
+
+
