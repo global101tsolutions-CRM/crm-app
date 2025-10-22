@@ -1,0 +1,2362 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Company &middot; Salesesy Preview</title>
+    <link rel="icon" type="image/svg+xml" href="../src/assets/salesesy-logo.svg" />
+    <style>
+      :root {
+        font-family: "Inter", system-ui, Arial, sans-serif;
+        --bg: #050f09;
+        --bg-alt: radial-gradient(circle at top left, rgba(34, 197, 94, 0.16), transparent 55%);
+        --sunken: rgba(6, 23, 14, 0.9);
+        --panel: rgba(10, 27, 18, 0.95);
+        --surface: rgba(7, 21, 13, 0.92);
+        --border: rgba(34, 84, 49, 0.45);
+        --border-strong: rgba(61, 132, 89, 0.6);
+        --text: #f5fff7;
+        --text-soft: #dbe7de;
+        --muted: #8fa999;
+        --accent: #22c55e;
+        --accent-hover: #4ade80;
+        --accent-dark: #15803d;
+        --accent-soft: rgba(34, 197, 94, 0.22);
+        --accent-border-soft: rgba(56, 189, 120, 0.35);
+        --ghost-button-bg: rgba(7, 21, 13, 0.9);
+        --ghost-button-border: rgba(38, 92, 54, 0.6);
+        --primary-text: #042b14;
+      }
+
+      body.theme-light {
+        --bg: #f7f9fb;
+        --bg-alt: radial-gradient(circle at top left, rgba(37, 99, 235, 0.14), transparent 55%);
+        --sunken: rgba(255, 255, 255, 0.96);
+        --panel: rgba(255, 255, 255, 0.97);
+        --surface: rgba(248, 250, 252, 0.96);
+        --border: rgba(148, 163, 184, 0.5);
+        --border-strong: rgba(100, 116, 139, 0.65);
+        --text: #0f172a;
+        --text-soft: #1e293b;
+        --muted: #475569;
+        --accent: #2563eb;
+        --accent-hover: #60a5fa;
+        --accent-dark: #1d4ed8;
+        --accent-soft: rgba(37, 99, 235, 0.18);
+        --accent-border-soft: rgba(37, 99, 235, 0.28);
+        --ghost-button-bg: rgba(236, 244, 255, 0.9);
+        --ghost-button-border: rgba(148, 163, 184, 0.55);
+        --primary-text: #eff6ff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--bg);
+        background-image: var(--bg-alt);
+        color: var(--text);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .page-chrome {
+        position: fixed;
+        top: 24px;
+        left: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        align-items: flex-start;
+        z-index: 30;
+      }
+
+      .theme-toggle {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 60px;
+        height: 28px;
+        padding: 4px 6px;
+        border-radius: 999px;
+        border: 1px solid var(--border-strong);
+        background: var(--panel);
+        cursor: pointer;
+        transition: border-color 0.2s ease, background 0.2s ease;
+      }
+      .theme-toggle .toggle-thumb {
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 22px;
+        height: 22px;
+        border-radius: 24px;
+        background: var(--accent);
+        box-shadow: 0 4px 12px rgba(34, 197, 94, 0.35);
+        transition: transform 0.25s ease;
+      }
+      .theme-toggle .icon {
+        display: inline-flex;
+        color: var(--muted);
+        visibility: hidden;
+        opacity: 0;
+        transition: color 0.2s ease, opacity 0.2s ease;
+      }
+      .theme-toggle.dark .icon.moon,
+      .theme-toggle.light .icon.sun {
+        color: var(--accent);
+        visibility: visible;
+        opacity: 1;
+      }
+      .theme-toggle.dark .icon.sun,
+      .theme-toggle.light .icon.moon {
+        visibility: hidden;
+        opacity: 0;
+      }
+      .theme-toggle.light .toggle-thumb {
+        transform: translateX(30px);
+      }
+      .theme-toggle:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      .brand-link {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .brand-title {
+        margin: 0;
+        font-size: 1.4rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+      }
+      .brand-sub {
+        font-size: 0.72rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      header {
+        padding: 120px 36px 28px;
+        display: flex;
+        gap: 24px;
+        align-items: center;
+      }
+
+      .avatar {
+        width: 82px;
+        height: 82px;
+        border-radius: 24px;
+        background: var(--accent-soft);
+        color: var(--accent);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 34px;
+        font-weight: 600;
+        flex-shrink: 0;
+      }
+
+      .header-info h1 {
+        margin: 0;
+        font-size: 2.1rem;
+      }
+
+      .header-info p {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .header-actions {
+        margin-left: auto;
+        display: flex;
+        gap: 12px;
+      }
+
+      button {
+        border-radius: 12px;
+        border: 1px solid var(--border-strong);
+        background: var(--ghost-button-bg);
+        color: var(--text-soft);
+        padding: 10px 18px;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: background 0.15s ease, transform 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+      }
+
+      button:hover {
+        border-color: var(--accent-border-soft);
+      }
+
+      button:active {
+        transform: translateY(1px);
+      }
+
+      button.primary {
+        background: var(--accent);
+        color: var(--primary-text);
+        border-color: var(--accent-dark);
+        font-weight: 600;
+      }
+
+      button.primary:hover {
+        background: var(--accent-hover);
+      }
+
+      button.ghost {
+        background: var(--ghost-button-bg);
+        border-color: var(--ghost-button-border);
+      }
+
+      main {
+        flex: 1;
+        padding: 0 36px 48px;
+        display: flex;
+        gap: 24px;
+      }
+
+      aside {
+        width: 320px;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .info-card {
+        background: var(--panel);
+        border-radius: 18px;
+        border: 1px solid var(--border);
+        padding: 22px 24px;
+      }
+
+      .info-card h2 {
+        margin: 0 0 14px;
+        font-size: 1.05rem;
+      }
+
+      .info-grid {
+        display: grid;
+        gap: 14px;
+      }
+
+      .info-item span {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
+
+      .info-item strong {
+        display: block;
+        margin-top: 4px;
+        font-weight: 600;
+      }
+      .info-item a {
+        color: var(--accent-hover);
+        text-decoration: none;
+      }
+      .info-item a:hover {
+        text-decoration: underline;
+      }
+
+      .contacts-card-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .contacts-card-heading h2 {
+        margin: 0;
+        font-size: 1.05rem;
+      }
+
+      .contact-count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent);
+        background: var(--accent-soft);
+        border: 1px solid var(--accent-border-soft);
+      }
+
+      .contacts-card-description {
+        margin: 0 0 14px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .contacts-empty {
+        border: 1px dashed var(--border);
+        border-radius: 12px;
+        padding: 16px;
+        font-size: 0.9rem;
+        color: var(--muted);
+        text-align: center;
+        margin: 0;
+      }
+
+      .contacts-table-wrapper {
+        margin-top: 12px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--surface);
+      }
+
+      .contacts-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 0;
+      }
+
+      .contacts-table th,
+      .contacts-table td {
+        padding: 12px 16px;
+        text-align: left;
+      }
+
+      .contacts-table thead th {
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        border-bottom: 1px solid var(--border);
+        background: rgba(34, 197, 94, 0.1);
+      }
+
+      .contacts-table tbody tr + tr {
+        border-top: 1px solid var(--border);
+      }
+
+      .contacts-table td {
+        font-size: 0.92rem;
+      }
+
+      .contact-name {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+      }
+
+      .contact-name-link {
+        color: inherit;
+        text-decoration: none;
+        transition: color 0.15s ease;
+      }
+
+      .contact-name-link:hover,
+      .contact-name-link:focus {
+        color: var(--accent-hover);
+        text-decoration: underline;
+      }
+
+      .contact-meta {
+        margin-top: 4px;
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+
+      .contact-placeholder {
+        color: var(--muted);
+        font-style: italic;
+      }
+
+      .contact-tag {
+        display: inline-flex;
+        align-items: center;
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: var(--accent-soft);
+        border: 1px solid var(--accent-border-soft);
+        color: var(--accent);
+      }
+
+      .contact-link {
+        color: var(--accent-hover);
+        text-decoration: none;
+      }
+
+      .contact-link:hover,
+      .contact-link:focus {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 640px) {
+        .contacts-table th,
+        .contacts-table td {
+          padding: 10px 12px;
+        }
+
+        .contacts-card-heading {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 6px;
+        }
+      }
+
+      section.timeline {
+        flex: 1;
+        background: var(--panel);
+        border-radius: 18px;
+        border: 1px solid var(--border);
+        padding: 26px 28px;
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+      }
+
+      .timeline-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .timeline-header h2 {
+        margin: 0;
+        font-size: 1.08rem;
+      }
+
+      .filters {
+        display: flex;
+        gap: 10px;
+        color: var(--muted);
+        font-size: 0.9rem;
+        flex-wrap: wrap;
+      }
+
+      .filters button {
+        position: relative;
+        background: transparent;
+        border: 1px solid transparent;
+        color: inherit;
+        font: inherit;
+        padding: 6px 14px;
+        border-radius: 999px;
+        cursor: pointer;
+        transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+      }
+
+      .filters button:hover {
+        color: var(--text-soft);
+      }
+
+      .filters button.active {
+        color: var(--text);
+        background: rgba(34, 197, 94, 0.14);
+        border-color: var(--accent-border-soft);
+      }
+
+      .timeline-body {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .timeline-list {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .task-panel {
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 20px 22px;
+        background: var(--surface);
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      body.theme-light .task-panel {
+        background: rgba(255, 255, 255, 0.97);
+      }
+
+      .task-panel[hidden] {
+        display: none;
+      }
+
+      .task-header {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .task-header h3 {
+        margin: 0;
+        font-size: 1rem;
+      }
+
+      .task-header p {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .task-header-right {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        align-items: center;
+        justify-content: flex-end;
+      }
+
+      .task-metric {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        text-align: right;
+      }
+
+      .task-metric span {
+        font-size: 0.75rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .task-metric strong {
+        font-size: 1.1rem;
+      }
+
+      .task-list {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .task-card {
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 16px 18px;
+        background: rgba(7, 21, 13, 0.82);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      body.theme-light .task-card {
+        background: rgba(248, 250, 252, 0.96);
+      }
+
+      .task-top {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .task-badge {
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        border: 1px solid transparent;
+      }
+
+      .task-badge.overdue {
+        color: var(--danger);
+        border-color: rgba(239, 68, 68, 0.4);
+        background: rgba(239, 68, 68, 0.12);
+      }
+
+      .task-badge.due-soon {
+        color: var(--accent);
+        border-color: var(--accent-border-soft);
+        background: rgba(34, 197, 94, 0.12);
+      }
+
+      .task-badge.completed {
+        color: var(--muted);
+        border-color: rgba(148, 176, 162, 0.4);
+        background: rgba(148, 176, 162, 0.14);
+      }
+
+      .task-due {
+        color: var(--muted);
+        font-size: 0.85rem;
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
+      }
+
+      .task-due svg {
+        opacity: 0.7;
+      }
+
+      .task-title {
+        font-weight: 600;
+        font-size: 1rem;
+      }
+
+      .task-desc {
+        margin: 0;
+        color: var(--text-soft);
+        font-size: 0.92rem;
+      }
+
+      .task-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(3, 12, 7, 0.78);
+        backdrop-filter: blur(6px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        z-index: 100;
+      }
+
+      .modal-backdrop[hidden] {
+        display: none;
+      }
+
+      .modal {
+        width: min(640px, 100%);
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        box-shadow: 0 22px 60px rgba(0, 0, 0, 0.55);
+        display: flex;
+        flex-direction: column;
+        max-height: calc(100vh - 60px);
+      }
+
+      body.theme-light .modal {
+        background: rgba(255, 255, 255, 0.98);
+        border-color: rgba(148, 163, 184, 0.55);
+      }
+
+      .modal-header {
+        padding: 22px 28px 18px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .modal-header h3 {
+        margin: 0;
+        font-size: 1.1rem;
+      }
+
+      .modal-body {
+        padding: 0 28px 28px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      .modal-footer {
+        padding: 18px 28px 24px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+      }
+
+      .modal-close {
+        background: transparent;
+        border: none;
+        color: var(--muted);
+        padding: 6px;
+        border-radius: 8px;
+      }
+
+      .modal-close:hover {
+        color: var(--text);
+        background: rgba(34, 197, 94, 0.08);
+      }
+
+      .modal-field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .modal input,
+      .modal select,
+      .modal textarea {
+        background: rgba(7, 21, 13, 0.82);
+        border: 1px solid rgba(38, 92, 54, 0.5);
+        color: var(--text);
+        border-radius: 12px;
+        width: 100%;
+        padding: 12px 14px;
+      }
+
+      body.theme-light .modal input,
+      body.theme-light .modal select,
+      body.theme-light .modal textarea {
+        background: rgba(236, 244, 255, 0.9);
+        border-color: rgba(148, 163, 184, 0.6);
+        color: var(--text-soft);
+      }
+
+      .modal textarea {
+        min-height: 140px;
+        resize: vertical;
+      }
+
+      .modal input[type="date"]::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+        opacity: 0.9;
+        transform: scale(1.6);
+        transform-origin: right center;
+      }
+
+      .modal input[type="date"]::-webkit-calendar-picker-indicator:hover {
+        opacity: 1;
+      }
+
+      .modal-toggle {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 0.9rem;
+        color: var(--text-soft);
+        margin: 4px 0 12px;
+      }
+
+      .modal-toggle input[type="checkbox"] {
+        width: auto;
+        height: auto;
+        accent-color: var(--accent);
+        transform: scale(1.1);
+      }
+
+      .modal-label {
+        font-size: 0.78rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .modal-inline {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 12px;
+      }
+
+      .timeline-entry {
+        display: grid;
+        grid-template-columns: 160px 1fr;
+        gap: 16px;
+        align-items: start;
+      }
+
+      .timeline-entry time {
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .timeline-card {
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 16px 18px;
+        background: var(--surface);
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .timeline-card h3 {
+        margin: 0;
+        font-size: 0.98rem;
+      }
+
+      .timeline-card p {
+        margin: 0;
+        color: var(--text-soft);
+        font-size: 0.92rem;
+      }
+
+      .empty {
+        padding: 18px;
+        background: rgba(8, 24, 15, 0.74);
+        border: 1px dashed var(--border);
+        border-radius: 14px;
+        text-align: center;
+        color: var(--muted);
+      }
+
+      @media (max-width: 1100px) {
+        main {
+          flex-direction: column;
+        }
+        aside {
+          width: 100%;
+          flex-direction: row;
+          gap: 18px;
+        }
+        aside .info-card {
+          flex: 1;
+        }
+        section.timeline {
+          padding: 22px;
+        }
+        .timeline-entry {
+          grid-template-columns: 1fr;
+        }
+        .task-header-right {
+          justify-content: flex-start;
+        }
+        .task-header-right .task-metric {
+          text-align: left;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .page-chrome {
+          top: 16px;
+          left: 16px;
+        }
+        header {
+          flex-direction: column;
+          align-items: flex-start;
+          padding: 128px 20px 24px;
+        }
+        .header-actions {
+          margin-left: 0;
+        }
+        main {
+          padding: 0 20px 32px;
+        }
+        aside {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body class="theme-dark">
+    <div class="page-chrome">
+      <button class="theme-toggle dark" type="button" aria-label="Switch to light mode" title="Switch to light mode">
+        <span class="toggle-thumb"></span>
+        <span class="icon sun" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5" fill="currentColor" opacity="0.15"></circle>
+            <circle cx="12" cy="12" r="4" fill="none"></circle>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M5.64 18.36l1.42-1.42M16.94 6.64l1.42-1.42"></path>
+          </svg>
+        </span>
+        <span class="icon moon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 0 1 11.21 3 7 7 0 1 0 21 12.79Z"></path>
+          </svg>
+        </span>
+      </button>
+      <a class="brand brand-link" href="../preview.html">
+        <img src="../src/assets/salesesy-logo.svg" alt="Salesesy logo" width="36" height="36" style="filter: drop-shadow(0 4px 8px rgba(0,0,0,0.35));" />
+        <div>
+          <h2 class="brand-title">Salesesy</h2>
+          <div class="brand-sub">Growth CRM</div>
+        </div>
+      </a>
+    </div>
+    <header>
+      <div class="avatar" id="company-avatar">AC</div>
+      <div class="header-info">
+        <h1 id="company-name">Company</h1>
+        <p id="company-sub">Primary contact &mdash; loading&hellip;</p>
+      </div>
+      <div class="header-actions">
+        <button type="button" class="ghost" onclick="goBack()">Back</button>
+        <button type="button" class="primary" onclick="openAddContact()">Add contact</button>
+      </div>
+    </header>
+
+    <main>
+      <aside>
+        <div class="info-card">
+          <h2>Contact overview</h2>
+          <div class="info-grid" id="overview-card">
+            <!-- populated by script -->
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="contacts-card-heading">
+            <h2>Company contacts</h2>
+            <span class="contact-count" id="company-contacts-count">0</span>
+          </div>
+          <p id="company-contacts-description" class="contacts-card-description">
+            Primary stakeholders linked to this account.
+          </p>
+          <div id="company-contacts-empty" class="contacts-empty">
+            No contacts stored for this company yet.
+          </div>
+          <div class="contacts-table-wrapper" id="company-contacts-wrapper" hidden>
+            <table class="contacts-table">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Phone</th>
+                </tr>
+              </thead>
+              <tbody id="company-contacts-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </aside>
+
+      <section class="timeline">
+        <div class="timeline-header">
+          <h2>Activity timeline</h2>
+          <div class="filters" role="tablist">
+            <button type="button" role="tab" class="active" data-filter="all" aria-selected="true" tabindex="0">All activity</button>
+            <button type="button" role="tab" data-filter="notes" aria-selected="false" tabindex="-1">Notes</button>
+            <button type="button" role="tab" data-filter="emails" aria-selected="false" tabindex="-1">Emails</button>
+            <button type="button" role="tab" data-filter="calls" aria-selected="false" tabindex="-1">Calls</button>
+            <button type="button" role="tab" data-filter="tasks" aria-selected="false" tabindex="-1">Tasks</button>
+          </div>
+        </div>
+        <div class="timeline-body">
+          <div class="timeline-list" id="timeline">
+            <div class="empty">No activity yet. Add an email, call, or note to get started.</div>
+          </div>
+          <div class="task-panel" id="timeline-notes" hidden>
+            <div class="task-header">
+              <div>
+                <h3>Notes</h3>
+                <p class="muted">Capture important context for your team.</p>
+              </div>
+              <div class="task-header-right">
+                <button class="primary" type="button" data-open-note-modal>Create note</button>
+              </div>
+            </div>
+            <div class="task-list" id="note-list">
+              <div class="empty">No notes yet. Create a note to share insights.</div>
+            </div>
+          </div>
+          <div class="task-panel" id="timeline-emails" hidden>
+            <div class="task-header">
+              <div>
+                <h3>Emails</h3>
+                <p class="muted">Track key conversations sent to this company.</p>
+              </div>
+              <div class="task-header-right">
+                <button class="primary" type="button" data-open-email-modal>Log an email</button>
+              </div>
+            </div>
+            <div class="task-list" id="email-list">
+              <div class="empty">No emails logged yet. Log an email to keep the record up to date.</div>
+            </div>
+          </div>
+          <div class="task-panel" id="timeline-calls" hidden>
+            <div class="task-header">
+              <div>
+                <h3>Calls</h3>
+                <p class="muted">Keep a history of every conversation.</p>
+              </div>
+              <div class="task-header-right">
+                <button class="primary" type="button" data-open-call-modal>Log a call</button>
+              </div>
+            </div>
+            <div class="task-list" id="call-list">
+              <div class="empty">No calls logged yet. Log a call to capture the details.</div>
+            </div>
+          </div>
+          <div class="task-panel" id="timeline-tasks" hidden>
+            <div class="task-header">
+              <div>
+                <h3>Task queue</h3>
+                <p class="muted">Track follow-ups and next steps for this account.</p>
+              </div>
+              <div class="task-header-right">
+                <div class="task-metric">
+                  <span>Open</span>
+                  <strong id="task-open-count">0</strong>
+                </div>
+                <div class="task-metric">
+                  <span>Completed</span>
+                  <strong id="task-completed-count">0</strong>
+                </div>
+                <button class="primary" type="button" data-open-task-modal>Create task</button>
+              </div>
+            </div>
+            <div class="task-list" id="task-list">
+              <div class="empty">No tasks scheduled yet. Create a task to stay on track.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal-backdrop" id="task-modal" aria-hidden="true" hidden>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="task-modal-title">
+        <div class="modal-header">
+          <h3 id="task-modal-title">Create task</h3>
+          <button class="modal-close" type="button" id="task-modal-close" aria-label="Close task modal">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-field">
+            <label class="modal-label" for="task-title-input">Task</label>
+            <input id="task-title-input" placeholder="Enter your task" />
+          </div>
+
+          <div class="modal-inline">
+            <div class="modal-field">
+              <label class="modal-label" for="task-date-input">Activity date</label>
+              <input id="task-date-input" type="date" />
+              <small class="muted" id="task-date-hint">In 3 business days · 08:00 AM</small>
+            </div>
+            <div class="modal-field">
+              <label class="modal-label" for="task-reminder-select">Send reminder</label>
+              <select id="task-reminder-select">
+                <option value="none">No reminder</option>
+                <option value="30">30 minutes before</option>
+                <option value="60">1 hour before</option>
+                <option value="1440">1 day before</option>
+              </select>
+            </div>
+          </div>
+
+          <label class="modal-toggle">
+            <input type="checkbox" id="task-repeat-toggle" />
+            <span>Set to repeat</span>
+          </label>
+
+          <div class="modal-inline">
+            <div class="modal-field">
+              <span class="modal-label">Priority</span>
+              <button class="ghost" type="button" id="task-priority-btn">None</button>
+            </div>
+            <div class="modal-field">
+              <span class="modal-label">Assigned to</span>
+              <button class="ghost" type="button" id="task-owner-btn">Ava Novak</button>
+            </div>
+          </div>
+
+          <div class="modal-field">
+            <label class="modal-label" for="task-notes-input">Notes</label>
+            <textarea id="task-notes-input" rows="5" placeholder="Add context for the follow-up..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="ghost" type="button" id="task-modal-cancel">Cancel</button>
+          <button class="primary" type="button" id="task-modal-create">Create task</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="note-modal" aria-hidden="true" hidden>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="note-modal-title">
+        <div class="modal-header">
+          <h3 id="note-modal-title">Create note</h3>
+          <button class="modal-close" type="button" id="note-modal-close" aria-label="Close note modal">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-field">
+            <label class="modal-label" for="note-title-input">Title</label>
+            <input id="note-title-input" placeholder="Add a short title" />
+          </div>
+          <div class="modal-field">
+            <label class="modal-label" for="note-category-select">Category</label>
+            <select id="note-category-select">
+              <option value="General">General</option>
+              <option value="Meeting recap">Meeting recap</option>
+              <option value="Next steps">Next steps</option>
+            </select>
+          </div>
+          <div class="modal-field">
+            <label class="modal-label" for="note-content-input">Note</label>
+            <textarea id="note-content-input" placeholder="Capture the key takeaways for your team..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="ghost" type="button" id="note-modal-cancel">Cancel</button>
+          <button class="primary" type="button" id="note-modal-create">Save note</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="email-modal" aria-hidden="true" hidden>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="email-modal-title">
+        <div class="modal-header">
+          <h3 id="email-modal-title">Log email</h3>
+          <button class="modal-close" type="button" id="email-modal-close" aria-label="Close email modal">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-field">
+            <label class="modal-label" for="email-subject-input">Subject</label>
+            <input id="email-subject-input" placeholder="Email subject" />
+          </div>
+          <div class="modal-inline">
+            <div class="modal-field">
+              <label class="modal-label" for="email-direction-select">Direction</label>
+              <select id="email-direction-select">
+                <option value="Sent">Sent</option>
+                <option value="Received">Received</option>
+              </select>
+            </div>
+            <div class="modal-field">
+              <label class="modal-label" for="email-date-input">Date</label>
+              <input type="date" id="email-date-input" />
+            </div>
+            <div class="modal-field">
+              <label class="modal-label" for="email-time-input">Time</label>
+              <input type="time" id="email-time-input" />
+            </div>
+          </div>
+          <div class="modal-field">
+            <label class="modal-label" for="email-recipient-input">Recipients</label>
+            <input id="email-recipient-input" placeholder="e.g. victor.chen@globex.com" />
+          </div>
+          <div class="modal-field">
+            <label class="modal-label" for="email-body-input">Summary</label>
+            <textarea id="email-body-input" placeholder="What was the outcome of this email?"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="ghost" type="button" id="email-modal-cancel">Cancel</button>
+          <button class="primary" type="button" id="email-modal-create">Log email</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="call-modal" aria-hidden="true" hidden>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="call-modal-title">
+        <div class="modal-header">
+          <h3 id="call-modal-title">Log call</h3>
+          <button class="modal-close" type="button" id="call-modal-close" aria-label="Close call modal">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-field">
+            <label class="modal-label" for="call-subject-input">Subject</label>
+            <input id="call-subject-input" placeholder="What was discussed?" />
+          </div>
+          <div class="modal-inline">
+            <div class="modal-field">
+              <label class="modal-label" for="call-date-input">Date</label>
+              <input type="date" id="call-date-input" />
+            </div>
+            <div class="modal-field">
+              <label class="modal-label" for="call-time-input">Time</label>
+              <input type="time" id="call-time-input" />
+            </div>
+            <div class="modal-field">
+              <label class="modal-label" for="call-duration-input">Duration (min)</label>
+              <input type="number" id="call-duration-input" min="0" step="1" placeholder="15" />
+            </div>
+          </div>
+          <div class="modal-field">
+            <label class="modal-label" for="call-outcome-select">Outcome</label>
+            <select id="call-outcome-select">
+              <option value="Completed">Completed</option>
+              <option value="No answer">No answer</option>
+              <option value="Left voicemail">Left voicemail</option>
+            </select>
+          </div>
+          <div class="modal-field">
+            <label class="modal-label" for="call-participants-input">Participants</label>
+            <input id="call-participants-input" placeholder="e.g. Ava Novak, Victor Chen" />
+          </div>
+          <div class="modal-field">
+            <label class="modal-label" for="call-notes-input">Notes</label>
+            <textarea id="call-notes-input" placeholder="Summarize the conversation..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="ghost" type="button" id="call-modal-cancel">Cancel</button>
+          <button class="primary" type="button" id="call-modal-create">Log call</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const THEME_KEY = "salesesy-theme";
+      const pageBody = document.body;
+      const themeToggle = document.querySelector(".theme-toggle");
+      const escapeHtml = (value = "") =>
+        String(value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char] || char));
+      const applyTheme = (value) => {
+        const next = value === "light" ? "light" : "dark";
+        pageBody.classList.remove("theme-dark", "theme-light");
+        pageBody.classList.add(`theme-${next}`);
+        if (themeToggle) {
+          themeToggle.classList.remove("dark", "light");
+          themeToggle.classList.add(next);
+          const label = next === "dark" ? "Switch to light mode" : "Switch to dark mode";
+          themeToggle.setAttribute("aria-label", label);
+          themeToggle.setAttribute("title", label);
+        }
+      };
+
+      applyTheme(window.localStorage.getItem(THEME_KEY));
+      if (themeToggle) {
+        themeToggle.addEventListener("click", () => {
+          const next = pageBody.classList.contains("theme-dark") ? "light" : "dark";
+          window.localStorage.setItem(THEME_KEY, next);
+          applyTheme(next);
+        });
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      const slug = (params.get("company") || "").trim().toLowerCase();
+      const storageKey = "preview-companies";
+
+      const avatarEl = document.getElementById("company-avatar");
+      const nameEl = document.getElementById("company-name");
+      const subtitleEl = document.getElementById("company-sub");
+      const overviewCard = document.getElementById("overview-card");
+      const timelineEl = document.getElementById("timeline");
+      const filterButtons = document.querySelectorAll(".filters button[data-filter]");
+      const tasksPanel = document.getElementById("timeline-tasks");
+      const notesPanel = document.getElementById("timeline-notes");
+      const emailsPanel = document.getElementById("timeline-emails");
+      const callsPanel = document.getElementById("timeline-calls");
+      const taskList = document.getElementById("task-list");
+      const noteList = document.getElementById("note-list");
+      const emailList = document.getElementById("email-list");
+      const callList = document.getElementById("call-list");
+      const taskOpenCount = document.getElementById("task-open-count");
+      const taskCompletedCount = document.getElementById("task-completed-count");
+      const taskModal = document.getElementById("task-modal");
+      const taskModalClose = document.getElementById("task-modal-close");
+      const taskModalCancel = document.getElementById("task-modal-cancel");
+      const taskModalCreate = document.getElementById("task-modal-create");
+      const taskTriggers = document.querySelectorAll("[data-open-task-modal]");
+      const taskTitleInput = document.getElementById("task-title-input");
+      const taskDateInput = document.getElementById("task-date-input");
+      const taskDateHint = document.getElementById("task-date-hint");
+      const taskReminderSelect = document.getElementById("task-reminder-select");
+      const taskRepeatToggle = document.getElementById("task-repeat-toggle");
+      const taskPriorityBtn = document.getElementById("task-priority-btn");
+      const taskOwnerBtn = document.getElementById("task-owner-btn");
+      const taskNotesInput = document.getElementById("task-notes-input");
+
+      const noteModal = document.getElementById("note-modal");
+      const noteModalClose = document.getElementById("note-modal-close");
+      const noteModalCancel = document.getElementById("note-modal-cancel");
+      const noteModalCreate = document.getElementById("note-modal-create");
+      const noteTriggers = document.querySelectorAll("[data-open-note-modal]");
+      const noteTitleInput = document.getElementById("note-title-input");
+      const noteCategorySelect = document.getElementById("note-category-select");
+      const noteContentInput = document.getElementById("note-content-input");
+
+      const emailModal = document.getElementById("email-modal");
+      const emailModalClose = document.getElementById("email-modal-close");
+      const emailModalCancel = document.getElementById("email-modal-cancel");
+      const emailModalCreate = document.getElementById("email-modal-create");
+      const emailTriggers = document.querySelectorAll("[data-open-email-modal]");
+      const emailSubjectInput = document.getElementById("email-subject-input");
+      const emailDirectionSelect = document.getElementById("email-direction-select");
+      const emailDateInput = document.getElementById("email-date-input");
+      const emailTimeInput = document.getElementById("email-time-input");
+      const emailRecipientInput = document.getElementById("email-recipient-input");
+      const emailBodyInput = document.getElementById("email-body-input");
+
+      const callModal = document.getElementById("call-modal");
+      const callModalClose = document.getElementById("call-modal-close");
+      const callModalCancel = document.getElementById("call-modal-cancel");
+      const callModalCreate = document.getElementById("call-modal-create");
+      const callTriggers = document.querySelectorAll("[data-open-call-modal]");
+      const callSubjectInput = document.getElementById("call-subject-input");
+      const callDateInput = document.getElementById("call-date-input");
+      const callTimeInput = document.getElementById("call-time-input");
+      const callDurationInput = document.getElementById("call-duration-input");
+      const callOutcomeSelect = document.getElementById("call-outcome-select");
+      const callParticipantsInput = document.getElementById("call-participants-input");
+      const callNotesInput = document.getElementById("call-notes-input");
+      const contactsWrapper = document.getElementById("company-contacts-wrapper");
+      const contactsTableBody = document.getElementById("company-contacts-body");
+      const contactsEmptyState = document.getElementById("company-contacts-empty");
+      const contactsCountLabel = document.getElementById("company-contacts-count");
+
+      let contactsData = [];
+      let timelineData = [];
+      let tasksData = [];
+      let notesData = [];
+      let emailsData = [];
+      let callsData = [];
+      let activeFilter = "all";
+      let defaultEmptyMessage = "No activity yet. Add an email, call, or note to get started.";
+      const taskPriorities = ["None", "Low", "Medium", "High"];
+      const taskOwners = ["Ava Novak", "Ola Adams", "You"];
+      const defaultTaskTime = { hours: 8, minutes: 0 };
+
+      function initials(name) {
+        if (!name) return "AC";
+        const parts = name.trim().split(/\s+/);
+        if (!parts.length) return "AC";
+        const first = parts[0][0] || "";
+        const second = parts.length > 1 ? parts[parts.length - 1][0] : "";
+        return (first + second).toUpperCase() || first.toUpperCase();
+      }
+
+      function goBack() {
+        if (window.history.length > 1) {
+          window.history.back();
+        } else {
+          window.location.href = "../preview.html";
+        }
+      }
+
+      function openAddContact() {
+        const store = JSON.parse(window.localStorage.getItem(storageKey) || "{}");
+        const record = store[slug];
+        const query = new URLSearchParams();
+        if (slug) query.set("companySlug", slug);
+        if (record?.company) query.set("companyName", record.company);
+        window.location.href = `new-contact.html${query.toString() ? `?${query.toString()}` : ""}`;
+      }
+
+      const emptyCopy = (filter) => {
+        switch (filter) {
+          case "notes":
+            return "No notes recorded yet. Log a note to keep your team aligned.";
+          case "emails":
+            return "No emails logged for this company.";
+          case "calls":
+            return "No calls logged yet. Log a call to capture the details.";
+          default:
+            return defaultEmptyMessage;
+        }
+      };
+
+      const addBusinessDays = (date, businessDays) => {
+        const result = new Date(date);
+        let added = 0;
+        while (added < businessDays) {
+          result.setDate(result.getDate() + 1);
+          const day = result.getDay();
+          if (day !== 0 && day !== 6) added += 1;
+        }
+        return result;
+      };
+
+      const toISODate = (date) => date.toISOString().split("T")[0];
+
+      const toISOTime = (date) => date.toTimeString().slice(0, 5);
+
+      const updateDateHint = (value) => {
+        if (!taskDateHint) return;
+        if (!value) {
+          taskDateHint.textContent = "Select a due date";
+          return;
+        }
+        const due = new Date(`${value}T${String(defaultTaskTime.hours).padStart(2, "0")}:${String(defaultTaskTime.minutes).padStart(2, "0")}`);
+        const today = new Date();
+        const startToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        const diffDays = Math.round((due - startToday) / (1000 * 60 * 60 * 24));
+        let prefix = "Due today";
+        if (diffDays === 1) prefix = "Due tomorrow";
+        else if (diffDays > 1) prefix = `In ${diffDays} days`;
+        else if (diffDays === -1) prefix = "1 day ago";
+        else if (diffDays < -1) prefix = `${Math.abs(diffDays)} days ago`;
+
+        const weekday = due.toLocaleDateString(undefined, { weekday: "long" });
+        const timeLabel = due.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+        taskDateHint.textContent = `${prefix} · ${weekday} · ${timeLabel}`;
+      };
+
+      const cycleOption = (button, options) => {
+        if (!button || !options.length) return;
+        const current = button.textContent.trim();
+        const index = options.indexOf(current);
+        const nextValue = options[(index + 1) % options.length];
+        button.textContent = nextValue;
+      };
+
+      const resetTaskForm = () => {
+        if (taskTitleInput) taskTitleInput.value = "";
+        if (taskNotesInput) taskNotesInput.value = "";
+        if (taskReminderSelect) taskReminderSelect.value = "none";
+        if (taskRepeatToggle) taskRepeatToggle.checked = false;
+        if (taskPriorityBtn) taskPriorityBtn.textContent = taskPriorities[0];
+        if (taskOwnerBtn) taskOwnerBtn.textContent = taskOwners[0];
+
+        if (taskDateInput) {
+          const defaultDate = addBusinessDays(new Date(), 3);
+          const iso = defaultDate.toISOString().split("T")[0];
+          taskDateInput.value = iso;
+          updateDateHint(iso);
+        }
+      };
+
+      const renderContacts = (contacts = []) => {
+        if (!contactsWrapper || !contactsTableBody || !contactsEmptyState) return;
+        const normalize = (value) => (typeof value === "string" ? value.trim() : "");
+        const slugify = (value, fallback) => {
+          if (!value) return fallback;
+          const slug = String(value)
+            .trim()
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-+|-+$/g, "")
+            .slice(0, 42);
+          return slug || fallback;
+        };
+        const deriveContactId = (raw, index) => {
+          const candidates = [
+            raw?.id,
+            raw?.contact_id,
+            raw?.contactId,
+            raw?.uid,
+            raw?.slug,
+            raw?.handle,
+            raw?.email,
+            raw?.email_address,
+            raw?.emailAddress,
+            raw?.phone,
+            raw?.phone_number,
+            raw?.phoneNumber,
+            raw?.name,
+            `${raw?.first_name || ""} ${raw?.last_name || ""}`,
+          ];
+          for (const candidate of candidates) {
+            const slug = slugify(candidate, "");
+            if (slug) return slug;
+          }
+          return `contact-${index + 1}`;
+        };
+        const normalized = contacts
+          .map((raw, index) => {
+            if (!raw || typeof raw !== "object") return null;
+            const firstName = normalize(raw.first_name ?? raw.firstName);
+            const lastName = normalize(raw.last_name ?? raw.lastName);
+            const explicitName = normalize(raw.name);
+            const composedName = [firstName, lastName].filter(Boolean).join(" ");
+            const title = normalize(
+              raw.title ?? raw.job_title ?? raw.jobTitle ?? raw.role ?? raw.position
+            );
+            const email = normalize(raw.email ?? raw.email_address ?? raw.emailAddress);
+            const phone = normalize(raw.phone ?? raw.phone_number ?? raw.phoneNumber);
+            const relationship = normalize(
+              raw.relationship ?? raw.relation ?? raw.department ?? raw.team ?? raw.segment ?? raw.owner
+            );
+            const added = normalize(
+              raw.added_at ?? raw.created_at ?? raw.updated_at ?? raw.last_updated ?? raw.logged_at
+            );
+            const primary =
+              raw.primary === true ||
+              raw.is_primary === true ||
+              raw.primary_contact === true ||
+              raw.main === true;
+            return {
+              id: deriveContactId(raw, index),
+              name: explicitName || composedName,
+              title,
+              email,
+              phone,
+              relationship,
+              added,
+              primary,
+            };
+          })
+          .filter(Boolean)
+          .filter(
+            (contact) =>
+              contact.name || contact.title || contact.email || contact.phone || contact.relationship
+          );
+
+        if (!normalized.length) {
+          contactsWrapper.hidden = true;
+          contactsEmptyState.hidden = false;
+          contactsEmptyState.textContent = "No contacts stored for this company yet.";
+          contactsTableBody.innerHTML = "";
+          if (contactsCountLabel) contactsCountLabel.textContent = "0";
+          return;
+        }
+
+        let hasPrimary = normalized.some((contact) => contact.primary);
+        contactsTableBody.innerHTML = normalized
+          .map((contact, index) => {
+            const isPrimary = contact.primary || (!hasPrimary && index === 0);
+            if (isPrimary && !hasPrimary) {
+              hasPrimary = true;
+            }
+            const nameLabel = escapeHtml(contact.name || "Name not specified");
+            const primaryFlag = isPrimary ? '<span class="contact-tag">Primary</span>' : "";
+            const contactUrl = contact.id
+              ? `contact.html?company=${encodeURIComponent(slug)}&contact=${encodeURIComponent(contact.id)}`
+              : "";
+            const nameContent = contact.name
+              ? contact.id
+                ? `<a class="contact-name-link" href="${escapeHtml(contactUrl)}">${nameLabel}</a>`
+                : `<span>${nameLabel}</span>`
+              : '<span class="contact-placeholder">Name not specified</span>';
+            const relationshipLine = contact.relationship
+              ? `<div class="contact-meta">${escapeHtml(contact.relationship)}</div>`
+              : "";
+            const addedLine = contact.added
+              ? `<div class="contact-meta">Added ${escapeHtml(contact.added)}</div>`
+              : "";
+            const titleCell = contact.title
+              ? escapeHtml(contact.title)
+              : '<span class="contact-placeholder">Not specified</span>';
+            const emailCell = (() => {
+              if (!contact.email) {
+                return '<span class="contact-placeholder">Not specified</span>';
+              }
+              const trimmed = contact.email.trim();
+              const href = escapeHtml(`mailto:${encodeURI(trimmed)}`);
+              const label = escapeHtml(trimmed);
+              return `<a class="contact-link" href="${href}">${label}</a>`;
+            })();
+            const phoneCell = (() => {
+              if (!contact.phone) {
+                return '<span class="contact-placeholder">Not specified</span>';
+              }
+              const trimmed = contact.phone.trim();
+              const dial = trimmed.replace(/[^0-9+]/g, "") || trimmed;
+              const href = escapeHtml(`tel:${dial}`);
+              const label = escapeHtml(trimmed);
+              return `<a class="contact-link" href="${href}">${label}</a>`;
+            })();
+
+            return `
+              <tr>
+                <td>
+                  <div class="contact-name">
+                    ${nameContent}
+                    ${primaryFlag}
+                  </div>
+                  ${relationshipLine}
+                  ${addedLine}
+                </td>
+                <td>${titleCell}</td>
+                <td>${emailCell}</td>
+                <td>${phoneCell}</td>
+              </tr>
+            `;
+          })
+          .join("");
+
+        contactsWrapper.hidden = false;
+        contactsEmptyState.hidden = true;
+        if (contactsCountLabel) {
+          const count = normalized.length;
+          contactsCountLabel.textContent = count === 1 ? "1 contact" : `${count} contacts`;
+        }
+      };
+
+      const renderTimeline = (filter) => {
+        if (!timelineEl) return;
+        const scoped =
+          filter === "all" ? timelineData : timelineData.filter((item) => item.category === filter);
+        if (!scoped.length) {
+          timelineEl.innerHTML = `<div class="empty">${emptyCopy(filter)}</div>`;
+          return;
+        }
+        timelineEl.innerHTML = scoped
+          .map(
+            (entry) => `
+            <div class="timeline-entry">
+              <time>${entry.time}</time>
+              <div class="timeline-card">
+                <h3>${entry.type}</h3>
+                <p>${entry.description}</p>
+              </div>
+            </div>
+          `
+          )
+          .join("");
+      };
+
+      const renderTasks = (tasks) => {
+        if (!taskList) return;
+        if (!tasks.length) {
+          taskList.innerHTML =
+            '<div class="empty">No tasks scheduled yet. Create a task to stay on track.</div>';
+          if (taskOpenCount) taskOpenCount.textContent = "0";
+          if (taskCompletedCount) taskCompletedCount.textContent = "0";
+          return;
+        }
+
+        let openCount = 0;
+        let completeCount = 0;
+
+        taskList.innerHTML = tasks
+          .map((task) => {
+            if (task.status === "completed") {
+              completeCount += 1;
+            } else {
+              openCount += 1;
+            }
+            const badgeClass =
+              task.status === "overdue"
+                ? "overdue"
+                : task.status === "due-soon"
+                ? "due-soon"
+                : "completed";
+            return `
+              <div class="task-card">
+                <div class="task-top">
+                  <span class="task-badge ${badgeClass}">${task.statusLabel}</span>
+                  <span class="task-due">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>
+                    ${task.due}
+                  </span>
+                </div>
+                <div class="task-title">${task.title}</div>
+                <p class="task-desc">${task.description}</p>
+                <div class="task-meta">
+                  <span>${task.owner}</span>
+                  <span>${task.channel}</span>
+                </div>
+              </div>
+            `;
+          })
+          .join("");
+
+        if (taskOpenCount) taskOpenCount.textContent = openCount.toString();
+        if (taskCompletedCount) taskCompletedCount.textContent = completeCount.toString();
+      };
+
+      const renderNotes = (notes) => {
+        if (!noteList) return;
+        if (!notes.length) {
+          noteList.innerHTML =
+            '<div class="empty">No notes yet. Create a note to share insights.</div>';
+          return;
+        }
+        noteList.innerHTML = notes
+          .map(
+            (note) => `
+              <div class="task-card">
+                <div class="task-top">
+                  <span class="task-title">${note.title}</span>
+                  <span class="task-due">${note.time}</span>
+                </div>
+                <p class="task-desc">${note.content}</p>
+                <div class="task-meta">
+                  <span>${note.author}</span>
+                  <span>${note.category}</span>
+                </div>
+              </div>
+            `
+          )
+          .join("");
+      };
+
+      const renderEmails = (emails) => {
+        if (!emailList) return;
+        if (!emails.length) {
+          emailList.innerHTML =
+            '<div class="empty">No emails logged yet. Log an email to keep the record up to date.</div>';
+          return;
+        }
+        emailList.innerHTML = emails
+          .map((email) => {
+            const badgeClass = email.direction === "Sent" ? "due-soon" : "completed";
+            return `
+              <div class="task-card">
+                <div class="task-top">
+                  <span class="task-badge ${badgeClass}">${email.direction}</span>
+                  <span class="task-due">${email.time}</span>
+                </div>
+                <div class="task-title">${email.subject}</div>
+                <p class="task-desc">${email.summary}</p>
+                <div class="task-meta">
+                  <span>${email.recipients}</span>
+                  <span>${email.author}</span>
+                </div>
+              </div>
+            `;
+          })
+          .join("");
+      };
+
+      const renderCalls = (calls) => {
+        if (!callList) return;
+        if (!calls.length) {
+          callList.innerHTML =
+            '<div class="empty">No calls logged yet. Log a call to capture the details.</div>';
+          return;
+        }
+        callList.innerHTML = calls
+          .map((call) => {
+            const badgeClass = call.outcome === "Completed" ? "due-soon" : "overdue";
+            return `
+              <div class="task-card">
+                <div class="task-top">
+                  <span class="task-badge ${badgeClass}">${call.outcome}</span>
+                  <span class="task-due">${call.time}</span>
+                </div>
+                <div class="task-title">${call.subject}</div>
+                <p class="task-desc">${call.notes}</p>
+                <div class="task-meta">
+                  <span>${call.participants}</span>
+                  <span>${call.duration}</span>
+                </div>
+              </div>
+            `;
+          })
+          .join("");
+      };
+
+      const openTaskModal = () => {
+        if (!taskModal) return;
+        resetTaskForm();
+        taskModal.hidden = false;
+        taskModal.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+        setTimeout(() => taskTitleInput?.focus(), 10);
+      };
+
+      const closeTaskModal = () => {
+        if (!taskModal) return;
+        taskModal.hidden = true;
+        taskModal.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+      };
+
+      const openNoteModal = () => {
+        if (!noteModal) return;
+        if (noteTitleInput) noteTitleInput.value = "";
+        if (noteCategorySelect) noteCategorySelect.value = "General";
+        if (noteContentInput) noteContentInput.value = "";
+        noteModal.hidden = false;
+        noteModal.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+        setTimeout(() => noteTitleInput?.focus(), 10);
+      };
+
+      const closeNoteModal = () => {
+        if (!noteModal) return;
+        noteModal.hidden = true;
+        noteModal.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+      };
+
+      const openEmailModal = () => {
+        if (!emailModal) return;
+        const now = new Date();
+        if (emailSubjectInput) emailSubjectInput.value = "";
+        if (emailDirectionSelect) emailDirectionSelect.value = "Sent";
+        if (emailDateInput) emailDateInput.value = toISODate(now);
+        if (emailTimeInput) emailTimeInput.value = toISOTime(now);
+        if (emailRecipientInput) emailRecipientInput.value = "";
+        if (emailBodyInput) emailBodyInput.value = "";
+        emailModal.hidden = false;
+        emailModal.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+        setTimeout(() => emailSubjectInput?.focus(), 10);
+      };
+
+      const closeEmailModal = () => {
+        if (!emailModal) return;
+        emailModal.hidden = true;
+        emailModal.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+      };
+
+      const openCallModal = () => {
+        if (!callModal) return;
+        const now = new Date();
+        if (callSubjectInput) callSubjectInput.value = "";
+        if (callDateInput) callDateInput.value = toISODate(now);
+        if (callTimeInput) callTimeInput.value = toISOTime(now);
+        if (callDurationInput) callDurationInput.value = "15";
+        if (callOutcomeSelect) callOutcomeSelect.value = "Completed";
+        if (callParticipantsInput) callParticipantsInput.value = "";
+        if (callNotesInput) callNotesInput.value = "";
+        callModal.hidden = false;
+        callModal.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+        setTimeout(() => callSubjectInput?.focus(), 10);
+      };
+
+      const closeCallModal = () => {
+        if (!callModal) return;
+        callModal.hidden = true;
+        callModal.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+      };
+
+      const handleTaskCreate = () => {
+        const title = taskTitleInput?.value.trim() || "Untitled task";
+        const notes = taskNotesInput?.value.trim();
+        const dateValue = taskDateInput?.value;
+        const due = dateValue
+          ? new Date(`${dateValue}T${String(defaultTaskTime.hours).padStart(2, "0")}:${String(defaultTaskTime.minutes).padStart(2, "0")}`)
+          : new Date();
+        const dueLabel = due.toLocaleString(undefined, {
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
+        const startToday = new Date();
+        startToday.setHours(0, 0, 0, 0);
+        let status = "due-soon";
+        let statusLabel = "Due soon";
+        if (due < startToday) {
+          status = "overdue";
+          statusLabel = "Overdue";
+        } else if (due - startToday >= 2 * 24 * 60 * 60 * 1000) {
+          status = "due-soon";
+          statusLabel = "Open";
+        }
+
+        const priorityLabel = taskPriorityBtn?.textContent.trim() || "None";
+        const ownerLabel = taskOwnerBtn?.textContent.trim() || "You";
+        const reminderLabel = (() => {
+          const value = taskReminderSelect?.value || "none";
+          if (value === "none") return "No reminder set";
+          const minutes = Number(value);
+          if (minutes < 60) return `${minutes} minutes before`;
+          if (minutes === 60) return "1 hour before";
+          const days = minutes / 1440;
+          if (Number.isInteger(days)) return `${days} day${days > 1 ? "s" : ""} before`;
+          return `${minutes} minutes before`;
+        })();
+
+        tasksData.unshift({
+          status,
+          statusLabel,
+          due: dueLabel,
+          title,
+          description: notes || "No notes added yet.",
+          owner: `Owner: ${ownerLabel}`,
+          channel: `Priority: ${priorityLabel} · Reminder: ${reminderLabel}`,
+        });
+
+        renderTasks(tasksData);
+        timelineData.unshift({
+          time: new Date().toLocaleString(),
+          type: `Task added · ${title}`,
+          description: `${ownerLabel} · Due ${dueLabel}${notes ? ` — ${notes}` : ""}`,
+          category: "tasks",
+        });
+        if (activeFilter === "all") renderTimeline("all");
+        closeTaskModal();
+        setFilter("tasks");
+      };
+
+      const handleNoteCreate = () => {
+        const title = noteTitleInput?.value.trim() || "Untitled note";
+        const category = noteCategorySelect?.value || "General";
+        const content = noteContentInput?.value.trim() || "No additional details.";
+        const timestamp = new Date().toLocaleString();
+
+        notesData.unshift({
+          title,
+          category,
+          content,
+          time: timestamp,
+          author: "Logged by You",
+        });
+
+        timelineData.unshift({
+          time: timestamp,
+          type: title,
+          description: content,
+          category: "notes",
+        });
+
+        renderNotes(notesData);
+        if (activeFilter === "all") renderTimeline("all");
+        closeNoteModal();
+        setFilter("notes");
+      };
+
+      const handleEmailCreate = () => {
+        const subject = emailSubjectInput?.value.trim() || "Untitled email";
+        const direction = emailDirectionSelect?.value || "Sent";
+        const recipients = emailRecipientInput?.value.trim() || "Recipient not specified";
+        const summary = emailBodyInput?.value.trim() || "No summary provided.";
+        const scheduledDate = emailDateInput?.value;
+        const scheduledTime = emailTimeInput?.value;
+        const scheduledLabel = scheduledDate || scheduledTime
+          ? new Date(
+              `${scheduledDate || toISODate(new Date())}T${scheduledTime || "09:00"}`
+            ).toLocaleString()
+          : new Date().toLocaleString();
+
+        emailsData.unshift({
+          subject,
+          direction,
+          recipients,
+          summary,
+          author: direction === "Sent" ? "Sent by you" : "Received by you",
+          time: scheduledLabel,
+        });
+
+        timelineData.unshift({
+          time: scheduledLabel,
+          type: `${direction} email · ${subject}`,
+          description: `${recipients} · ${summary}`,
+          category: "emails",
+        });
+
+        renderEmails(emailsData);
+        if (activeFilter === "all") renderTimeline("all");
+        closeEmailModal();
+        setFilter("emails");
+      };
+
+      const handleCallCreate = () => {
+        const subject = callSubjectInput?.value.trim() || "Call logged";
+        const participants = callParticipantsInput?.value.trim() || "Participants not noted";
+        const notes = callNotesInput?.value.trim() || "No additional notes.";
+        const outcome = callOutcomeSelect?.value || "Completed";
+        const durationValue = Number(callDurationInput?.value) || 0;
+        const durationLabel = durationValue > 0 ? `${durationValue} min` : "Duration not recorded";
+        const scheduledDate = callDateInput?.value;
+        const scheduledTime = callTimeInput?.value;
+        const scheduledLabel = scheduledDate || scheduledTime
+          ? new Date(
+              `${scheduledDate || toISODate(new Date())}T${scheduledTime || "10:00"}`
+            ).toLocaleString()
+          : new Date().toLocaleString();
+
+        callsData.unshift({
+          subject,
+          outcome,
+          participants,
+          notes,
+          duration: `Duration: ${durationLabel}`,
+          time: scheduledLabel,
+        });
+
+        timelineData.unshift({
+          time: scheduledLabel,
+          type: `${outcome} call · ${subject}`,
+          description: `${participants} · ${notes}`,
+          category: "calls",
+        });
+
+        renderCalls(callsData);
+        if (activeFilter === "all") renderTimeline("all");
+        closeCallModal();
+        setFilter("calls");
+      };
+
+      const setFilter = (nextFilter) => {
+        activeFilter = nextFilter;
+        filterButtons.forEach((btn) => {
+          const isActive = btn.dataset.filter === nextFilter;
+          btn.classList.toggle("active", isActive);
+          btn.setAttribute("aria-selected", isActive ? "true" : "false");
+          btn.tabIndex = isActive ? 0 : -1;
+        });
+
+        if (!timelineEl) return;
+
+        timelineEl.hidden = nextFilter !== "all";
+        if (tasksPanel) tasksPanel.hidden = nextFilter !== "tasks";
+        if (notesPanel) notesPanel.hidden = nextFilter !== "notes";
+        if (emailsPanel) emailsPanel.hidden = nextFilter !== "emails";
+        if (callsPanel) callsPanel.hidden = nextFilter !== "calls";
+
+        if (nextFilter === "all") {
+          renderTimeline("all");
+        } else if (nextFilter === "tasks") {
+          renderTasks(tasksData);
+        } else if (nextFilter === "notes") {
+          renderNotes(notesData);
+        } else if (nextFilter === "emails") {
+          renderEmails(emailsData);
+        } else if (nextFilter === "calls") {
+          renderCalls(callsData);
+        } else {
+          renderTimeline(nextFilter);
+        }
+      };
+
+      filterButtons.forEach((btn) => {
+        btn.addEventListener("click", () => setFilter(btn.dataset.filter || "all"));
+      });
+
+      taskTriggers.forEach((btn) => btn.addEventListener("click", openTaskModal));
+      noteTriggers.forEach((btn) => btn.addEventListener("click", openNoteModal));
+      emailTriggers.forEach((btn) => btn.addEventListener("click", openEmailModal));
+      callTriggers.forEach((btn) => btn.addEventListener("click", openCallModal));
+      taskModalClose?.addEventListener("click", closeTaskModal);
+      taskModalCancel?.addEventListener("click", closeTaskModal);
+      taskModalCreate?.addEventListener("click", handleTaskCreate);
+      noteModalClose?.addEventListener("click", closeNoteModal);
+      noteModalCancel?.addEventListener("click", closeNoteModal);
+      noteModalCreate?.addEventListener("click", handleNoteCreate);
+      emailModalClose?.addEventListener("click", closeEmailModal);
+      emailModalCancel?.addEventListener("click", closeEmailModal);
+      emailModalCreate?.addEventListener("click", handleEmailCreate);
+      callModalClose?.addEventListener("click", closeCallModal);
+      callModalCancel?.addEventListener("click", closeCallModal);
+      callModalCreate?.addEventListener("click", handleCallCreate);
+      taskDateInput?.addEventListener("change", (event) => updateDateHint(event.target.value));
+      taskDateInput?.addEventListener("input", (event) => updateDateHint(event.target.value));
+
+      taskPriorityBtn?.addEventListener("click", () => cycleOption(taskPriorityBtn, taskPriorities));
+      taskOwnerBtn?.addEventListener("click", () => cycleOption(taskOwnerBtn, taskOwners));
+
+      if (taskModal) {
+        taskModal.addEventListener("click", (event) => {
+          if (event.target === taskModal) closeTaskModal();
+        });
+      }
+      if (noteModal) {
+        noteModal.addEventListener("click", (event) => {
+          if (event.target === noteModal) closeNoteModal();
+        });
+      }
+      if (emailModal) {
+        emailModal.addEventListener("click", (event) => {
+          if (event.target === emailModal) closeEmailModal();
+        });
+      }
+      if (callModal) {
+        callModal.addEventListener("click", (event) => {
+          if (event.target === callModal) closeCallModal();
+        });
+      }
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          if (taskModal && !taskModal.hidden) {
+            event.preventDefault();
+            closeTaskModal();
+            return;
+          }
+          if (noteModal && !noteModal.hidden) {
+            event.preventDefault();
+            closeNoteModal();
+            return;
+          }
+          if (emailModal && !emailModal.hidden) {
+            event.preventDefault();
+            closeEmailModal();
+            return;
+          }
+          if (callModal && !callModal.hidden) {
+            event.preventDefault();
+            closeCallModal();
+          }
+        }
+      });
+
+      function render() {
+        if (!slug) {
+          nameEl.textContent = "Company not specified";
+          subtitleEl.textContent = "Return to the list and create a contact.";
+          defaultEmptyMessage = "Missing company parameter in the URL.";
+          contactsData = [];
+          timelineData = [];
+          tasksData = [];
+          notesData = [];
+          emailsData = [];
+          callsData = [];
+          renderContacts(contactsData);
+          renderTasks(tasksData);
+          renderNotes(notesData);
+          renderEmails(emailsData);
+          renderCalls(callsData);
+          setFilter("all");
+          return;
+        }
+
+        const store = JSON.parse(window.localStorage.getItem(storageKey) || "{}");
+        const record = store[slug];
+
+        if (!record) {
+          nameEl.textContent = "Company not found";
+          subtitleEl.textContent = "Try creating the contact again.";
+          defaultEmptyMessage = "Local storage does not have a record for this company.";
+          contactsData = [];
+          timelineData = [];
+          tasksData = [];
+          notesData = [];
+          emailsData = [];
+          callsData = [];
+          renderContacts(contactsData);
+          renderTasks(tasksData);
+          renderNotes(notesData);
+          renderEmails(emailsData);
+          renderCalls(callsData);
+          setFilter("all");
+          return;
+        }
+
+        avatarEl.textContent = initials(record.company);
+        nameEl.textContent = record.company;
+        const fullName = [record.first_name, record.last_name].filter(Boolean).join(" ") || "No primary contact";
+        subtitleEl.textContent = `Primary contact \u2014 ${fullName}`;
+
+        const createdDate = record.created_at ? new Date(record.created_at) : new Date();
+        const createdLabel = createdDate.toLocaleString();
+        const primaryName =
+          fullName && !fullName.startsWith("No primary contact")
+            ? fullName.split(/\s+/)[0]
+            : (record.company || "the client team").split(/\s+/)[0] || "the client team";
+        const cityText = record.city ? escapeHtml(record.city) : "Not specified";
+        const countryText = record.country ? escapeHtml(record.country) : "Not specified";
+        const websiteRaw = (record.website || "").trim();
+        const websiteUrl = websiteRaw
+          ? encodeURI(websiteRaw.match(/^https?:\/\//i) ? websiteRaw : `https://${websiteRaw}`)
+              .replace(/"/g, "%22")
+              .replace(/'/g, "%27")
+          : "";
+        const websiteDisplay = websiteRaw ? escapeHtml(websiteRaw.replace(/^https?:\/\//i, "")) : "Not specified";
+        const websiteContent = websiteRaw
+          ? `<a href="${websiteUrl}" target="_blank" rel="noopener">${websiteDisplay}</a>`
+          : "Not specified";
+
+        defaultEmptyMessage = "No activity yet. Add an email, call, or note to get started.";
+
+        const relatedContacts = Array.isArray(record.contacts)
+          ? record.contacts.filter((item) => item && typeof item === "object")
+          : [];
+        const fallbackContact = {
+          first_name: record.first_name,
+          last_name: record.last_name,
+          title: record.title,
+          email: record.email,
+          phone: record.phone,
+          relationship: record.relationship || record.role || "",
+          added_at: createdLabel,
+        };
+        const fallbackHasDetails =
+          fallbackContact.first_name ||
+          fallbackContact.last_name ||
+          fallbackContact.email ||
+          fallbackContact.phone ||
+          fallbackContact.title;
+        const emailAlreadyTracked =
+          fallbackContact.email &&
+          relatedContacts.some((contact) => {
+            const rawEmail =
+              contact?.email ?? contact?.email_address ?? contact?.emailAddress ?? contact?.primaryEmail;
+            return (
+              typeof rawEmail === "string" &&
+              rawEmail.trim().toLowerCase() === fallbackContact.email.trim().toLowerCase()
+            );
+          });
+        const shouldIncludeFallback = fallbackHasDetails && !emailAlreadyTracked;
+        contactsData = relatedContacts.slice();
+        if (shouldIncludeFallback) {
+          const hasPrimaryContact = relatedContacts.some(
+            (contact) =>
+              contact?.primary === true ||
+              contact?.is_primary === true ||
+              contact?.primary_contact === true ||
+              contact?.main === true
+          );
+          contactsData.unshift({
+            ...fallbackContact,
+            primary: !hasPrimaryContact,
+          });
+        }
+        renderContacts(contactsData);
+
+        overviewCard.innerHTML = `
+          <div class="info-item">
+            <span>Created</span>
+            <strong>${createdLabel}</strong>
+          </div>
+          <div class="info-item">
+            <span>Contact</span>
+            <strong>${fullName}</strong>
+            <small style="color: var(--muted);">${record.title || "Role not specified"}</small>
+          </div>
+          <div class="info-item">
+            <span>Email</span>
+            <strong>${record.email || "Not specified"}</strong>
+          </div>
+          <div class="info-item">
+            <span>Phone</span>
+            <strong>${record.phone || "Not specified"}</strong>
+          </div>
+          <div class="info-item">
+            <span>Address</span>
+            <strong>${record.address || "Not specified"}</strong>
+          </div>
+          <div class="info-item">
+            <span>City</span>
+            <strong>${cityText}</strong>
+          </div>
+          <div class="info-item">
+            <span>Country</span>
+            <strong>${countryText}</strong>
+          </div>
+          <div class="info-item">
+            <span>Company website</span>
+            <strong>${websiteContent}</strong>
+          </div>
+        `;
+
+        timelineData = [
+          {
+            time: createdLabel,
+            type: "Contact created",
+            description: `Record created for ${fullName}.`,
+            category: "notes",
+          },
+          {
+            time: new Date(createdDate.getTime() + 15 * 60 * 1000).toLocaleString(),
+            type: "Discovery note saved",
+            description: "Initial discovery summary logged for the team.",
+            category: "notes",
+          },
+        ];
+
+        if (record.email) {
+          timelineData.push({
+            time: new Date(createdDate.getTime() + 45 * 60 * 1000).toLocaleString(),
+            type: "Email captured",
+            description: record.email,
+            category: "emails",
+          });
+        }
+
+        if (record.phone) {
+          timelineData.push({
+            time: new Date(createdDate.getTime() + 90 * 60 * 1000).toLocaleString(),
+            type: "Call logged",
+            description: `Follow-up call scheduled with ${primaryName}.`,
+            category: "calls",
+          });
+        }
+
+        notesData = [
+          {
+            title: "Discovery note saved",
+            category: "Meeting recap",
+            content: "Initial discovery summary logged for the team.",
+            time: new Date(createdDate.getTime() + 15 * 60 * 1000).toLocaleString(),
+            author: "Logged by Ava Novak",
+          },
+          {
+            title: "Implementation blockers",
+            category: "Next steps",
+            content: "Client needs security review completed before kickoff.",
+            time: new Date(createdDate.getTime() + 48 * 60 * 60 * 1000).toLocaleString(),
+            author: "Logged by Ola Adams",
+          },
+        ];
+
+        emailsData = [
+          {
+            subject: "Recap: Pricing review",
+            direction: "Sent",
+            recipients: record.email || "prospect@example.com",
+            summary: "Shared updated pricing grid and next steps.",
+            author: "Sent by you",
+            time: new Date(createdDate.getTime() + 45 * 60 * 1000).toLocaleString(),
+          },
+        ];
+
+        callsData = [
+          {
+            subject: "Qualification call",
+            outcome: "Completed",
+            participants: `${primaryName} · You`,
+            notes: "Qualified budget and confirmed decision timeline.",
+            duration: "Duration: 27 min",
+            time: new Date(createdDate.getTime() + 90 * 60 * 1000).toLocaleString(),
+          },
+        ];
+
+        tasksData = [
+          {
+            status: "overdue",
+            statusLabel: "Overdue",
+            due: "Oct 20, 2025 · 08:00",
+            title: `Send onboarding materials to ${primaryName}`,
+            description: "Share recap deck, security checklist, and pricing summary for review.",
+            owner: "Owner: Ava Novak",
+            channel: "Priority: High · Reminder: No reminder set",
+          },
+          {
+            status: "due-soon",
+            statusLabel: "Due soon",
+            due: "Oct 23, 2025 · 09:30",
+            title: "Schedule implementation kickoff",
+            description: `Confirm availability with ${primaryName} and align on agenda.`,
+            owner: "Owner: Ola Adams",
+            channel: "Priority: Medium · Reminder: 1 day before",
+          },
+          {
+            status: "completed",
+            statusLabel: "Completed",
+            due: "Completed Oct 18, 2025",
+            title: "Log discovery call notes",
+            description: "Meeting summary captured and shared with leadership.",
+            owner: "Owner: You",
+            channel: "Priority: None · Reminder: No reminder set",
+          },
+        ];
+
+        renderTasks(tasksData);
+        renderNotes(notesData);
+        renderEmails(emailsData);
+        renderCalls(callsData);
+        setFilter(activeFilter);
+      }
+
+      render();
+    </script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
