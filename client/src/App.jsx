@@ -373,9 +373,7 @@ export default function App() {
               stages={stages}
               pipeline={primaryPipeline}
               pipelineStages={primaryStages}
-****
-
-
+            />
           )}
           {tab === "companies" && (
             <CompanyView
@@ -434,6 +432,7 @@ export default function App() {
     </div>
   );
 }
+
 
 
 
