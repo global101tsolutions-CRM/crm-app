@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node index.js",
+    "start": "node index.js",
     "seed": "node seed.js",
     "reset": "rm -f data.sqlite && node seed.js",
     "test": "vitest",
